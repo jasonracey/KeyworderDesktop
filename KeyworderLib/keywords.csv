@@ -1,0 +1,175 @@
+Animal-Common,Animal
+Animal-Common,Bird
+Animal-Common,Black-Tailed Deer
+Animal-Common,Deer
+Animal-Common,Hoary Marmot
+Animal-Common,Mammal
+Animal-Common,Marmot
+Animal-Common,Ptarmigan
+Animal-Common,White-Tailed Ptarmigan
+Animal-Common,Wildlife
+Animal-Latin,Lagopus Leucura
+Animal-Latin,Marmota Caligata
+Animal-Latin,Marmota Caligata Cascandensis
+Animal-Latin,Odocoileus Hemionus
+Animal-Latin,Odocoileus Hemionus Columbianus
+Color,Black
+Color,Blue
+Color,Indigo
+Color,Orange
+Color,Pink
+Color,Red
+Color,Yellow
+Land,Cairn
+Land,Canyon
+Land,Cirque
+Land,Cliff
+Land,Crag
+Land,Desert
+Land,Foothill
+Land,Hill
+Land,Lookout
+Land,Mountain
+Land,Mountain Peak
+Land,Mountainside
+Land,Ridge
+Land,Rock Formation
+Land,Rocks
+Land,Stratovolcano
+Land,Volcano
+Location-General,Boulder River Wilderness
+Location-General,Gifford Pinchot National Forest
+Location-General,Glacier National Park
+Location-General,Goat Rocks Wilderness
+Location-General,Montana
+Location-General,Mount Baker National Recreation Area
+Location-General,Mount Baker-Snoqualmie National Forest
+Location-General,Mount Rainier National Park
+Location-General,North Cascades National Park
+Location-General,Okanogan-Wenatchee National Forest
+Location-General,Olympic National Park
+Location-General,Pacific Crest Trail
+Location-General,Utah
+Location-General,Wallace Falls State Park
+Location-General,Washington
+Location-General,Zion National Park
+Location-Specific,AltaMountain
+Location-Specific,Beckler Peak
+Location-Specific,Big Bend
+Location-Specific,Blue Lake
+Location-Specific,Boulder Creek
+Location-Specific,Boulder River
+Location-Specific,Canyon Creek
+Location-Specific,Cascade Pass
+Location-Specific,Chikamin Peak
+Location-Specific,Clover Lake
+Location-Specific,Colchuck Lake
+Location-Specific,Dorado Needle
+Location-Specific,Eldorado Peak
+Location-Specific,Elwha River
+Location-Specific,Excelsior Ridge
+Location-Specific,Gilbert Peak
+Location-Specific,Glacier Peak
+Location-Specific,Grasshopper Pass
+Location-Specific,Grinnell Point
+Location-Specific,Hannegan Peak
+Location-Specific,Heliotrope Ridge
+Location-Specific,Hidden Lake Peaks North
+Location-Specific,Huckleberry Mountain
+Location-Specific,Humes Ranch
+Location-Specific,Iceberg Lake
+Location-Specific,Indian Henry's Hunting Ground
+Location-Specific,Ives Peak
+Location-Specific,Lake Ann
+Location-Specific,Lake Ingalls
+Location-Specific,Lewis River
+Location-Specific,Liberty Bell Mountain
+Location-Specific,Lillian River
+Location-Specific,Mazama Ridge
+Location-Specific,Middle Lewis River Falls
+Location-Specific,Middle Wallace Falls
+Location-Specific,Mount Adams
+Location-Specific,Mount Baker
+Location-Specific,Mount Rainier
+Location-Specific,Mount Shuksan
+Location-Specific,Mount Stuart
+Location-Specific,North Fork Virgin River
+Location-Specific,Old Snowy Mountain
+Location-Specific,Palisades Lakes
+Location-Specific,Paradise
+Location-Specific,Paradise River
+Location-Specific,Park Butte
+Location-Specific,Rialto Beach
+Location-Specific,Ruth Mountain
+Location-Specific,Sahale Arm
+Location-Specific,Sahale Mountain
+Location-Specific,Shriner Peak
+Location-Specific,Skyline Trail
+Location-Specific,Swiftcurrent Lake
+Location-Specific,Table Mountain
+Location-Specific,Tower Mountain
+Location-Specific,Virgin River
+Plant-Common,Cottonwood
+Plant-Common,Field
+Plant-Common,Flower
+Plant-Common,Flowerbed
+Plant-Common,Foliage
+Plant-Common,Forest
+Plant-Common,Fremont Cottonwood
+Plant-Common,Garden
+Plant-Common,Grass
+Plant-Common,Grassland
+Plant-Common,Heather
+Plant-Common,Lupine
+Plant-Common,Meadow
+Plant-Common,Plant
+Plant-Common,Sitka Valerian
+Plant-Common,Small-Flowered Paintbrush
+Plant-Common,Subalpine Larch
+Plant-Common,Tree
+Plant-Common,Wildflower
+Plant-Latin,Castilleja Parviflora
+Plant-Latin,Larix Lyallii
+Plant-Latin,Valeriana Sitchensis
+Sky,Clouds
+Sky,Sky
+Sky,Stars
+Time,Autumn
+Time,Dusk
+Time,Fall
+Time,Night
+Time,Sunrise
+Time,Sunset
+Style,Black And White
+Style,Black Background
+Style,Blackandwhite
+Style,Bokeh
+Style,Bright
+Style,Depth Of Field
+Style,Landscape
+Style,Minimalism
+Style,Monochrome
+Style,Outdoor
+Style,Photo Border
+Style,Serene
+Style,Texture
+Tools,Bower 24mm F/1.4 ED AS UMC
+Tools,Canon EF 16-35mm F/4L IS USM
+Tools,Canon EF 17-40mm F/4L USM
+Tools,Canon EF 24-105mm F/4L IS USM
+Tools,Canon EF 70-200mm F/4L IS USM
+Tools,Canon EF-S 10-22mm F/3.5-4.5 USM
+Tools,Canon EOS 60D
+Tools,Canon EOS 6D
+Water,Beach
+Water,Creek
+Water,Glacier
+Water,Lake
+Water,Snow
+Water,Reflection
+Water,River
+Water,Stream
+Water,Tarn
+Water,Water
+Water,Watercourse
+Water,Waterfall
