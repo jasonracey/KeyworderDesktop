@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Keyworder
+namespace KeyworderControls
 {
     /// <summary>
     /// Prevents double-clicks from changing checkbox state on the TreeView control.

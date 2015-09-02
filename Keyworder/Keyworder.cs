@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using KeyworderLib;
@@ -15,10 +15,71 @@ namespace Keyworder
 
         private void Keyworder_Load(object sender, EventArgs e)
         {
-            ResetForm();
+            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
+            InitCreateTab(keywords);
+            InitDeleteTab(keywords);
+            InitEditTab(keywords);
+            InitSelectTab(keywords);
         }
 
-        private void allKeywordsTree_AfterCheck(object sender, TreeViewEventArgs e)
+        private void buttonClearSelections_Click(object sender, EventArgs e)
+        {
+            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
+            InitSelectTab(keywords);
+        }
+
+        private void buttonCopyToClipboard_Click(object sender, EventArgs e)
+        {
+            var builder = new StringBuilder();
+            for (var i = 0; i < listBoxSelectedKeywords.Items.Count; i++)
+            {
+                builder.Append(listBoxSelectedKeywords.Items[i]);
+                if (i < listBoxSelectedKeywords.Items.Count - 1)
+                {
+                    builder.Append(",");
+                }
+            }
+            Clipboard.SetText(builder.ToString());
+            labelKeywordsCopiedToClipboard.Visible = true;
+        }
+
+        private void buttonCreateCategory_Click(object sender, EventArgs e)
+        {
+            // todo
+            // data should be stored as xml not csv - there's a 1-to-many relationship
+            // to title case?
+            // don't add category if it already exists
+        }
+
+        private void buttonCreateKeyword_Click(object sender, EventArgs e)
+        {
+            // todo
+            // category must be selected
+            // keyword must be specified
+            // to title case?
+            // trim, replace double spaces
+            // don't add keyword if it already exists
+        }
+
+        private void comboBoxCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // todo
+            // if category is selected and textbox has text then enable button else disable
+        }
+
+        private void textBoxCategory_TextChanged(object sender, EventArgs e)
+        {
+            // todo
+            // if has text then enable button else disable
+        }
+
+        private void textBoxKeyword_TextChanged(object sender, EventArgs e)
+        {
+            // todo
+            // if has text and category is selected then enable button else disable
+        }
+
+        private void treeViewAllKeywords_AfterCheck(object sender, TreeViewEventArgs e)
         {
             // return when this event is triggered by code rather than user input
             if (e.Action == TreeViewAction.Unknown)
@@ -28,100 +89,83 @@ namespace Keyworder
 
             if (e.Node.Nodes.Count > 0)
             {
-                UpdateChildNodes(e.Node, e.Node.Checked);
+                NodeHandler.UpdateChildNodes(e.Node, e.Node.Checked);
             }
 
-            selectedKeywordsList.Items.Clear();
+            listBoxSelectedKeywords.Items.Clear();
 
-            foreach (TreeNode categoryNode in allKeywordsTree.Nodes)
+            foreach (TreeNode categoryNode in treeViewAllKeywords.Nodes)
             {
                 foreach (TreeNode keywordNode in categoryNode.Nodes)
                 {
                     if (keywordNode.Checked)
                     {
-                        selectedKeywordsList.Items.Add($"\"{keywordNode.Text}\"");
+                        listBoxSelectedKeywords.Items.Add($"\"{keywordNode.Text}\"");
                     }
                 }
             }
 
-            SetButtonState();
+            SetSelectTabButtonState();
+            labelKeywordsCopiedToClipboard.Visible = false;
         }
 
-        private void clearSelectedKeywordsButton_Click(object sender, EventArgs e)
+        private void InitCreateTab(SortedDictionary<string, SortedSet<string>> keywordsByCategory)
         {
-            ResetForm();
-        }
-
-        private void copyToClipboardButton_Click(object sender, EventArgs e)
-        {
-            var builder = new StringBuilder();
-            for (var i = 0; i < selectedKeywordsList.Items.Count; i++)
+            comboBoxCategory.Items.Clear();
+            foreach (var keyValuePair in keywordsByCategory)
             {
-                builder.Append(selectedKeywordsList.Items[i]);
-                if (i < selectedKeywordsList.Items.Count - 1)
-                {
-                    builder.Append(",");
-                }
+                comboBoxCategory.Items.Add(keyValuePair.Key);
             }
-            Clipboard.SetText(builder.ToString());
+            textBoxKeyword.Clear();
+            textBoxCategory.Clear();
+            SetCreateTabButtonState();
         }
 
-        private static bool AtLeastOneNodeIsChecked(IEnumerable nodes)
+        private void InitDeleteTab(SortedDictionary<string, SortedSet<string>> keywords)
         {
-            foreach (TreeNode node in nodes)
-            {
-                if (node.Nodes.Count > 0)
-                {
-                    return AtLeastOneNodeIsChecked(node.Nodes);
-                }
-                if (node.Checked)
-                {
-                    return true;
-                }
-            }
-            return false;
+            // todo
         }
 
-        private void LoadKeywords()
+        private void InitEditTab(SortedDictionary<string, SortedSet<string>> keywords)
         {
-            allKeywordsTree.BeginUpdate();
-            allKeywordsTree.Nodes.Clear();
-            foreach (var keywordGroup in KeywordRepository.GetKeywordsGroupedByCategory())
+            // todo
+        }
+
+        private void InitSelectTab(SortedDictionary<string, SortedSet<string>> keywords)
+        {
+            PopulateTreeViewAllKeywords(keywords);
+            listBoxSelectedKeywords.Items.Clear();
+            SetSelectTabButtonState();
+            labelKeywordsCopiedToClipboard.Visible = false;
+        }
+
+        private void PopulateTreeViewAllKeywords(SortedDictionary<string, SortedSet<string>> keywords)
+        {
+            treeViewAllKeywords.BeginUpdate();
+            treeViewAllKeywords.Nodes.Clear();
+            foreach (var keywordGroup in keywords)
             {
                 var categoryNode = new TreeNode(keywordGroup.Key);
                 foreach (var keyword in keywordGroup.Value)
                 {
                     categoryNode.Nodes.Add(keyword);
                 }
-                allKeywordsTree.Nodes.Add(categoryNode);
+                treeViewAllKeywords.Nodes.Add(categoryNode);
             }
-            allKeywordsTree.EndUpdate();
+            treeViewAllKeywords.EndUpdate();
         }
 
-        private void ResetForm()
+        private void SetCreateTabButtonState()
         {
-            LoadKeywords();
-            selectedKeywordsList.Items.Clear();
-            SetButtonState();
+            buttonCreateKeyword.Enabled = textBoxKeyword.Text.Trim() != string.Empty;
+            buttonCreateCategory.Enabled = textBoxCategory.Text.Trim() != string.Empty;
         }
 
-        private void SetButtonState()
+        private void SetSelectTabButtonState()
         {
-            var shouldEnable = AtLeastOneNodeIsChecked(allKeywordsTree.Nodes);
-            clearSelectedKeywordsButton.Enabled = shouldEnable;
-            copyToClipboardButton.Enabled = shouldEnable;
-        }
-
-        private static void UpdateChildNodes(TreeNode treeNode, bool nodeChecked)
-        {
-            foreach (TreeNode node in treeNode.Nodes)
-            {
-                node.Checked = nodeChecked;
-                if (node.Nodes.Count > 0)
-                {
-                    UpdateChildNodes(node, nodeChecked);
-                }
-            }
+            var shouldEnable = NodeHandler.AtLeastOneNodeIsChecked(treeViewAllKeywords.Nodes);
+            buttonClearSelections.Enabled = shouldEnable;
+            buttonCopyToClipboard.Enabled = shouldEnable;
         }
     }
 }

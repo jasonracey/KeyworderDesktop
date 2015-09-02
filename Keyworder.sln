@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keyworder", "Keyworder\Keyw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyworderLib", "KeyworderLib\KeyworderLib.csproj", "{76AF4871-70B1-48AC-BD76-512750FEB481}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyworderControls", "KeyworderControls\KeyworderControls.csproj", "{DD81A29A-9B63-43EC-99C9-B4E1EFA08E8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{76AF4871-70B1-48AC-BD76-512750FEB481}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76AF4871-70B1-48AC-BD76-512750FEB481}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76AF4871-70B1-48AC-BD76-512750FEB481}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD81A29A-9B63-43EC-99C9-B4E1EFA08E8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD81A29A-9B63-43EC-99C9-B4E1EFA08E8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD81A29A-9B63-43EC-99C9-B4E1EFA08E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD81A29A-9B63-43EC-99C9-B4E1EFA08E8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
