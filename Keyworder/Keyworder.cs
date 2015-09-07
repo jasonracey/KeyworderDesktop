@@ -62,9 +62,7 @@ namespace Keyworder
 
             KeywordRepository.CreateCategory(category);
 
-            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
-            InitCreateTab(keywords);
-            RefreshSelectTab(keywords);
+            ReloadForm();
 
             labelCreateCategoryMessage.Text = @"Category created!";
             labelCreateCategoryMessage.Visible = true;
@@ -94,12 +92,44 @@ namespace Keyworder
 
             KeywordRepository.CreateKeyword(category, keyword);
 
-            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
-            InitCreateTab(keywords);
-            RefreshSelectTab(keywords);
+            ReloadForm();
 
             labelCreateKeywordMessage.Text = @"Keyword created!";
             labelCreateKeywordMessage.Visible = true;
+        }
+
+        private void buttonDeleteCategory_Click(object sender, EventArgs e)
+        {
+            if (!comboBoxDeleteCategory.HasSelection())
+            {
+                labelDeleteCategoryMessage.Text = @"Please select a category.";
+                labelDeleteCategoryMessage.Visible = true;
+                return;
+            }
+
+            KeywordRepository.DeleteCategory(comboBoxDeleteCategory.SelectedItem.ToString());
+            
+            ReloadForm();
+
+            labelDeleteCategoryMessage.Text = @"Category deleted!";
+            labelDeleteCategoryMessage.Visible = true;
+        }
+
+        private void buttonDeleteKeyword_Click(object sender, EventArgs e)
+        {
+            if (!comboBoxDeleteKeyword.HasSelection())
+            {
+                labelDeleteKeywordMessage.Text = @"Please select a category.";
+                labelDeleteKeywordMessage.Visible = true;
+                return;
+            }
+
+            KeywordRepository.DeleteKeyword(comboBoxDeleteKeyword.SelectedItem.ToString());
+
+            ReloadForm();
+
+            labelDeleteKeywordMessage.Text = @"Keyword deleted!";
+            labelDeleteKeywordMessage.Visible = true;
         }
 
         private void buttonEditCategory_Click(object sender, EventArgs e)
@@ -126,10 +156,7 @@ namespace Keyworder
 
             KeywordRepository.EditCategory(oldValue, newValue);
 
-            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
-            InitCreateTab(keywords);
-            InitEditTab(keywords);
-            RefreshSelectTab(keywords);
+            ReloadForm();
 
             labelEditCategoryMessage.Text = @"Category saved!";
             labelEditCategoryMessage.Visible = true;
@@ -159,10 +186,7 @@ namespace Keyworder
 
             KeywordRepository.EditKeyword(oldValue, newValue);
 
-            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
-            InitCreateTab(keywords);
-            InitEditTab(keywords);
-            RefreshSelectTab(keywords);
+            ReloadForm();
 
             labelEditKeywordMessage.Text = @"Keyword saved!";
             labelEditKeywordMessage.Visible = true;
@@ -171,6 +195,16 @@ namespace Keyworder
         private void comboBoxCategoryOfKeywordToCreate_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetCreateTabButtonState();
+        }
+
+        private void comboBoxDeleteCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetDeleteTabButtonState();
+        }
+
+        private void comboBoxDeleteKeyword_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetDeleteTabButtonState();
         }
 
         private void comboBoxEditCategory_SelectedIndexChanged(object sender, EventArgs e)
@@ -229,6 +263,7 @@ namespace Keyworder
             {
                 comboBoxCategoryOfKeywordToCreate.Items.Add(keyValuePair.Key);
             }
+            comboBoxCategoryOfKeywordToCreate.SelectedIndex = 0;
             textBoxCreateKeyword.Clear();
             textBoxCreateCategory.Clear();
             labelCreateCategoryMessage.Visible = false;
@@ -238,7 +273,23 @@ namespace Keyworder
 
         private void InitDeleteTab(SortedDictionary<string, SortedSet<string>> keywords)
         {
-            // todo
+            comboBoxDeleteKeyword.Items.Clear();
+            var distinctKeywords = keywords.Values.SelectMany(k => k).Distinct().ToList();
+            distinctKeywords.Sort();
+            foreach (var kwd in distinctKeywords)
+            {
+                comboBoxDeleteKeyword.Items.Add(kwd);
+            }
+            comboBoxDeleteKeyword.SelectedIndex = 0;
+            comboBoxDeleteCategory.Items.Clear();
+            foreach (var cat in keywords.Keys)
+            {
+                comboBoxDeleteCategory.Items.Add(cat);
+            }
+            comboBoxDeleteCategory.SelectedIndex = 0;
+            labelDeleteCategoryMessage.Visible = false;
+            labelDeleteKeywordMessage.Visible = false;
+            SetDeleteTabButtonState();
         }
 
         private void InitEditTab(SortedDictionary<string, SortedSet<string>> keywords)
@@ -250,11 +301,13 @@ namespace Keyworder
             {
                 comboBoxEditKeyword.Items.Add(kwd);
             }
+            comboBoxEditKeyword.SelectedIndex = 0;
             comboBoxEditCategory.Items.Clear();
             foreach (var cat in keywords.Keys)
             {
                 comboBoxEditCategory.Items.Add(cat);
             }
+            comboBoxEditCategory.SelectedIndex = 0;
             textBoxEditKeyword.Clear();
             textBoxEditCategory.Clear();
             labelEditCategoryMessage.Visible = false;
@@ -321,10 +374,31 @@ namespace Keyworder
             PopulateListBoxSelectedItems(treeViewAllKeywords.Nodes);
         }
 
+        private void ReloadForm()
+        {
+            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
+            InitCreateTab(keywords);
+            InitDeleteTab(keywords);
+            InitEditTab(keywords);
+            RefreshSelectTab(keywords);
+        }
+
         private void SetCreateTabButtonState()
         {
             buttonCreateKeyword.Enabled = comboBoxCategoryOfKeywordToCreate.HasSelection() && textBoxCreateKeyword.HasText();
             buttonCreateCategory.Enabled = textBoxCreateCategory.HasText();
+        }
+
+        private void SetDeleteTabButtonState()
+        {
+            buttonDeleteKeyword.Enabled = comboBoxDeleteCategory.HasSelection();
+            buttonDeleteCategory.Enabled = comboBoxDeleteKeyword.HasSelection();
+        }
+
+        private void SetEditTabButtonState()
+        {
+            buttonEditKeyword.Enabled = comboBoxEditKeyword.HasSelection() && textBoxEditKeyword.HasText();
+            buttonEditCategory.Enabled = comboBoxEditCategory.HasSelection() && textBoxEditCategory.HasText();
         }
 
         private void SetSelectTabButtonState()
@@ -332,12 +406,6 @@ namespace Keyworder
             var shouldEnable = NodeHandler.AtLeastOneNodeIsChecked(treeViewAllKeywords.Nodes);
             buttonClearSelections.Enabled = shouldEnable;
             buttonCopyToClipboard.Enabled = shouldEnable;
-        }
-
-        private void SetEditTabButtonState()
-        {
-            buttonEditKeyword.Enabled = comboBoxEditKeyword.HasSelection() && textBoxEditKeyword.HasText();
-            buttonEditCategory.Enabled = comboBoxEditCategory.HasSelection() && textBoxEditCategory.HasText();
         }
     }
 }
