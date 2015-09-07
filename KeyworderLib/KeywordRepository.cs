@@ -15,7 +15,13 @@ namespace KeyworderLib
                 throw new ArgumentException("category is required", nameof(category));
             }
             var keywordString = $"{category},";
-            WriteKeywordString(keywordString);
+            var keywordStrings = ReadKeywordStrings();
+            if (keywordStrings.Contains(keywordString))
+            {
+                return;
+            }
+            keywordStrings.Add(keywordString);
+            WriteKeywordStrings(keywordStrings);
         }
 
         public static void CreateKeyword(string category, string keyword)
@@ -29,7 +35,42 @@ namespace KeyworderLib
                 throw new ArgumentException("keyword is required", nameof(keyword));
             }
             var keywordString = $"{category},{keyword}";
-            WriteKeywordString(keywordString);
+            var keywordStrings = ReadKeywordStrings();
+            if (keywordStrings.Contains(keywordString))
+            {
+                return;
+            }
+            // if user has assigned a category its first keyword then remove the category placeholder string
+            var categoryString = $"{keywordString.Split(',')[0]},";
+            keywordStrings.Remove(categoryString);
+            keywordStrings.Add(keywordString);
+            WriteKeywordStrings(keywordStrings);
+        }
+
+        public static void EditCategory(string oldValue, string newValue)
+        {
+            if (string.IsNullOrWhiteSpace(oldValue))
+            {
+                throw new ArgumentException("oldValue is required", nameof(oldValue));
+            }
+            if (string.IsNullOrWhiteSpace(newValue))
+            {
+                throw new ArgumentException("newValue is required", nameof(newValue));
+            }
+            EditItem($"{oldValue},", $"{newValue},");
+        }
+
+        public static void EditKeyword(string oldValue, string newValue)
+        {
+            if (string.IsNullOrWhiteSpace(oldValue))
+            {
+                throw new ArgumentException("oldValue is required", nameof(oldValue));
+            }
+            if (string.IsNullOrWhiteSpace(newValue))
+            {
+                throw new ArgumentException("newValue is required", nameof(newValue));
+            }
+            EditItem($",{oldValue}", $",{newValue}");
         }
 
         public static SortedDictionary<string, SortedSet<string>> GetKeywordsGroupedByCategory()
@@ -52,6 +93,18 @@ namespace KeyworderLib
             return keywordsGroupedByCategory;
         }
 
+        private static void EditItem(string oldValue, string newValue)
+        {
+            var newKeywordStrings = new SortedSet<string>();
+            var oldKeywordStrings = ReadKeywordStrings();
+            foreach (var oldKeywordString in oldKeywordStrings)
+            {
+                var newKeywordString = oldKeywordString.Replace(oldValue, newValue);
+                newKeywordStrings.Add(newKeywordString);
+            }
+            WriteKeywordStrings(newKeywordStrings);
+        }
+
         private static SortedSet<string> ReadKeywordStrings()
         {
             var keywordStrings = new SortedSet<string>();
@@ -66,22 +119,8 @@ namespace KeyworderLib
             return keywordStrings;
         }
 
-        private static void WriteKeywordString(string keywordString)
+        private static void WriteKeywordStrings(SortedSet<string> keywordStrings)
         {
-            var keywordStrings = ReadKeywordStrings();
-            if (keywordStrings.Contains(keywordString))
-            {
-                return;
-            }
-            // if user has assigned a category its first keyword then remove the category placeholder string
-            var parts = keywordString.Split(',');
-            var haveKeyword = !string.IsNullOrWhiteSpace(parts[1]);
-            if (haveKeyword)
-            {
-                var categoryString = $"{parts[0]},";
-                keywordStrings.Remove(categoryString);
-            }
-            keywordStrings.Add(keywordString);
             if (File.Exists(Path))
             {
                 File.Delete(Path);

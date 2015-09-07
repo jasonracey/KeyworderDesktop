@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using KeyworderLib;
@@ -47,14 +48,14 @@ namespace Keyworder
 
         private void buttonCreateCategory_Click(object sender, EventArgs e)
         {
-            if (!textBoxCategory.HasText())
+            if (!textBoxCreateCategory.HasText())
             {
-                labelCreateCategory.Text = @"Please specify a category.";
-                labelCreateCategory.Visible = true;
+                labelCreateCategoryMessage.Text = @"Please specify a category.";
+                labelCreateCategoryMessage.Visible = true;
                 return;
             }
 
-            var category = textBoxCategory.CleanText();
+            var category = textBoxCreateCategory.CleanText();
 
             var textInfo = new CultureInfo("en-US", false).TextInfo;
             category = textInfo.ToTitleCase(category);
@@ -65,28 +66,28 @@ namespace Keyworder
             InitCreateTab(keywords);
             RefreshSelectTab(keywords);
 
-            labelCreateCategory.Text = @"Category created!";
-            labelCreateCategory.Visible = true;
+            labelCreateCategoryMessage.Text = @"Category created!";
+            labelCreateCategoryMessage.Visible = true;
         }
 
         private void buttonCreateKeyword_Click(object sender, EventArgs e)
         {
-            if (!comboBoxCategory.HasSelection())
+            if (!comboBoxCategoryOfKeywordToCreate.HasSelection())
             {
-                labelCreateKeyword.Text = @"Please select a category.";
-                labelCreateKeyword.Visible = true;
+                labelCreateKeywordMessage.Text = @"Please select a category.";
+                labelCreateKeywordMessage.Visible = true;
                 return;
             }
 
-            if (!textBoxKeyword.HasText())
+            if (!textBoxCreateKeyword.HasText())
             {
-                labelCreateKeyword.Text = @"Please specify a keyword.";
-                labelCreateKeyword.Visible = true;
+                labelCreateKeywordMessage.Text = @"Please specify a keyword.";
+                labelCreateKeywordMessage.Visible = true;
                 return;
             }
 
-            var category = comboBoxCategory.SelectedItem.ToString();
-            var keyword = textBoxKeyword.CleanText();
+            var category = comboBoxCategoryOfKeywordToCreate.SelectedItem.ToString();
+            var keyword = textBoxCreateKeyword.CleanText();
 
             var textInfo = new CultureInfo("en-US", false).TextInfo;
             keyword = textInfo.ToTitleCase(keyword);
@@ -97,25 +98,115 @@ namespace Keyworder
             InitCreateTab(keywords);
             RefreshSelectTab(keywords);
 
-            labelCreateKeyword.Text = @"Keyword created!";
-            labelCreateKeyword.Visible = true;
+            labelCreateKeywordMessage.Text = @"Keyword created!";
+            labelCreateKeywordMessage.Visible = true;
         }
 
-        private void comboBoxCategory_SelectedIndexChanged(object sender, EventArgs e)
+        private void buttonEditCategory_Click(object sender, EventArgs e)
+        {
+            if (!comboBoxEditCategory.HasSelection())
+            {
+                labelEditCategoryMessage.Text = @"Please select a category.";
+                labelEditCategoryMessage.Visible = true;
+                return;
+            }
+
+            if (!textBoxEditCategory.HasText())
+            {
+                labelEditCategoryMessage.Text = @"Please specify an edit.";
+                labelEditCategoryMessage.Visible = true;
+                return;
+            }
+
+            var oldValue = comboBoxEditCategory.SelectedItem.ToString();
+            var newValue = textBoxEditCategory.CleanText();
+
+            var textInfo = new CultureInfo("en-US", false).TextInfo;
+            newValue = textInfo.ToTitleCase(newValue);
+
+            KeywordRepository.EditCategory(oldValue, newValue);
+
+            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
+            InitCreateTab(keywords);
+            InitEditTab(keywords);
+            RefreshSelectTab(keywords);
+
+            labelEditCategoryMessage.Text = @"Category saved!";
+            labelEditCategoryMessage.Visible = true;
+        }
+
+        private void buttonEditKeyword_Click(object sender, EventArgs e)
+        {
+            if (!comboBoxEditKeyword.HasSelection())
+            {
+                labelEditKeywordMessage.Text = @"Please select a keyword.";
+                labelEditKeywordMessage.Visible = true;
+                return;
+            }
+
+            if (!textBoxEditKeyword.HasText())
+            {
+                labelEditKeywordMessage.Text = @"Please specify an edit.";
+                labelEditKeywordMessage.Visible = true;
+                return;
+            }
+
+            var oldValue = comboBoxEditKeyword.SelectedItem.ToString();
+            var newValue = textBoxEditKeyword.CleanText();
+
+            var textInfo = new CultureInfo("en-US", false).TextInfo;
+            newValue = textInfo.ToTitleCase(newValue);
+
+            KeywordRepository.EditKeyword(oldValue, newValue);
+
+            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
+            InitCreateTab(keywords);
+            InitEditTab(keywords);
+            RefreshSelectTab(keywords);
+
+            labelEditKeywordMessage.Text = @"Keyword saved!";
+            labelEditKeywordMessage.Visible = true;
+        }
+
+        private void comboBoxCategoryOfKeywordToCreate_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetCreateTabButtonState();
         }
 
-        private void textBoxCategory_TextChanged(object sender, EventArgs e)
+        private void comboBoxEditCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
-            labelCreateCategory.Visible = false;
+            textBoxEditCategory.Text = comboBoxEditCategory.SelectedItem.ToString();
+            SetEditTabButtonState();
+        }
+
+        private void comboBoxEditKeyword_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBoxEditKeyword.Text = comboBoxEditKeyword.SelectedItem.ToString();
+            SetEditTabButtonState();
+        }
+
+        private void textBoxCreateCategory_TextChanged(object sender, EventArgs e)
+        {
+            labelCreateCategoryMessage.Visible = false;
             SetCreateTabButtonState();
         }
 
-        private void textBoxKeyword_TextChanged(object sender, EventArgs e)
+        private void textBoxCreateKeyword_TextChanged(object sender, EventArgs e)
         {
-            labelCreateKeyword.Visible = false;
+            labelCreateKeywordMessage.Visible = false;
             SetCreateTabButtonState();
+        }
+
+        private void textBoxEditCategory_TextChanged(object sender, EventArgs e)
+        {
+            labelEditCategoryMessage.Visible = false;
+            SetEditTabButtonState();
+        }
+
+        private void textBoxEditKeyword_TextChanged(object sender, EventArgs e)
+        {
+            labelEditKeywordMessage.Visible = false;
+            SetEditTabButtonState();
         }
 
         private void treeViewAllKeywords_AfterCheck(object sender, TreeViewEventArgs e)
@@ -131,17 +222,17 @@ namespace Keyworder
             labelKeywordsCopiedToClipboard.Visible = false;
         }
 
-        private void InitCreateTab(SortedDictionary<string, SortedSet<string>> keywordsByCategory)
+        private void InitCreateTab(SortedDictionary<string, SortedSet<string>> keywords)
         {
-            comboBoxCategory.Items.Clear();
-            foreach (var keyValuePair in keywordsByCategory)
+            comboBoxCategoryOfKeywordToCreate.Items.Clear();
+            foreach (var keyValuePair in keywords)
             {
-                comboBoxCategory.Items.Add(keyValuePair.Key);
+                comboBoxCategoryOfKeywordToCreate.Items.Add(keyValuePair.Key);
             }
-            textBoxKeyword.Clear();
-            textBoxCategory.Clear();
-            labelCreateCategory.Visible = false;
-            labelCreateKeyword.Visible = false;
+            textBoxCreateKeyword.Clear();
+            textBoxCreateCategory.Clear();
+            labelCreateCategoryMessage.Visible = false;
+            labelCreateKeywordMessage.Visible = false;
             SetCreateTabButtonState();
         }
 
@@ -152,7 +243,23 @@ namespace Keyworder
 
         private void InitEditTab(SortedDictionary<string, SortedSet<string>> keywords)
         {
-            // todo
+            comboBoxEditKeyword.Items.Clear();
+            var distinctKeywords = keywords.Values.SelectMany(k => k).Distinct().ToList();
+            distinctKeywords.Sort();
+            foreach (var kwd in distinctKeywords)
+            {
+                comboBoxEditKeyword.Items.Add(kwd);
+            }
+            comboBoxEditCategory.Items.Clear();
+            foreach (var cat in keywords.Keys)
+            {
+                comboBoxEditCategory.Items.Add(cat);
+            }
+            textBoxEditKeyword.Clear();
+            textBoxEditCategory.Clear();
+            labelEditCategoryMessage.Visible = false;
+            labelEditKeywordMessage.Visible = false;
+            SetEditTabButtonState();
         }
 
         private void InitSelectTab(SortedDictionary<string, SortedSet<string>> keywords)
@@ -216,8 +323,8 @@ namespace Keyworder
 
         private void SetCreateTabButtonState()
         {
-            buttonCreateKeyword.Enabled = comboBoxCategory.HasSelection() && textBoxKeyword.HasText();
-            buttonCreateCategory.Enabled = textBoxCategory.HasText();
+            buttonCreateKeyword.Enabled = comboBoxCategoryOfKeywordToCreate.HasSelection() && textBoxCreateKeyword.HasText();
+            buttonCreateCategory.Enabled = textBoxCreateCategory.HasText();
         }
 
         private void SetSelectTabButtonState()
@@ -225,6 +332,12 @@ namespace Keyworder
             var shouldEnable = NodeHandler.AtLeastOneNodeIsChecked(treeViewAllKeywords.Nodes);
             buttonClearSelections.Enabled = shouldEnable;
             buttonCopyToClipboard.Enabled = shouldEnable;
+        }
+
+        private void SetEditTabButtonState()
+        {
+            buttonEditKeyword.Enabled = comboBoxEditKeyword.HasSelection() && textBoxEditKeyword.HasText();
+            buttonEditCategory.Enabled = comboBoxEditCategory.HasSelection() && textBoxEditCategory.HasText();
         }
     }
 }
