@@ -1,63 +1,98 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace KeyworderLib
 {
     public static class KeywordRepository
     {
-        private const string Repository = @"keywords.csv";
+        private const string Path = @"Keywords.csv";
+
+        public static void CreateCategory(string category)
+        {
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                throw new ArgumentException("category is required", nameof(category));
+            }
+            var keywordString = $"{category},";
+            WriteKeywordString(keywordString);
+        }
+
+        public static void CreateKeyword(string category, string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                throw new ArgumentException("category is required", nameof(category));
+            }
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                throw new ArgumentException("keyword is required", nameof(keyword));
+            }
+            var keywordString = $"{category},{keyword}";
+            WriteKeywordString(keywordString);
+        }
 
         public static SortedDictionary<string, SortedSet<string>> GetKeywordsGroupedByCategory()
         {
             var keywordsGroupedByCategory = new SortedDictionary<string, SortedSet<string>>();
-
-            foreach (var keyword in ReadKeywords())
+            foreach (var keywordString in ReadKeywordStrings())
             {
-                if (!keywordsGroupedByCategory.ContainsKey(keyword.Category))
+                var parts = keywordString.Split(',');
+                var category = parts[0];
+                var keyword = parts[1];
+                if (!keywordsGroupedByCategory.ContainsKey(category))
                 {
-                    keywordsGroupedByCategory.Add(keyword.Category, new SortedSet<string>());
+                    keywordsGroupedByCategory.Add(category, new SortedSet<string>());
                 }
-                keywordsGroupedByCategory[keyword.Category].Add(keyword.Text);
+                if (!string.IsNullOrWhiteSpace(keyword))
+                {
+                    keywordsGroupedByCategory[category].Add(keyword);
+                }
             }
-
             return keywordsGroupedByCategory;
         }
 
-        public static void WriteKeyword(Keyword keyword)
+        private static SortedSet<string> ReadKeywordStrings()
         {
-            var keywords = ReadKeywords();
-            if (keywords.Contains(keyword))
-            {
-                return;
-            }
-            keywords.Add(keyword);
-            keywords.Sort(new KeywordComparer());
-            if (File.Exists(Repository))
-            {
-                File.Delete(Repository);
-            }
-            using (var writer = new StreamWriter(Repository))
-            {
-                foreach (var item in keywords)
-                {
-                    writer.WriteLine($"{item.Category},{item.Text}");
-                }
-            }
-        }
-
-        private static List<Keyword> ReadKeywords()
-        {
-            var keywords = new List<Keyword>();
-            using (var reader = new StreamReader(Repository))
+            var keywordStrings = new SortedSet<string>();
+            using (var reader = new StreamReader(Path))
             {
                 string keywordString;
                 while ((keywordString = reader.ReadLine()) != null)
                 {
-                    var parts = keywordString.Split(',');
-                    keywords.Add(new Keyword(parts[0], parts[1]));
+                    keywordStrings.Add(keywordString);
                 }
             }
-            return keywords;
+            return keywordStrings;
+        }
+
+        private static void WriteKeywordString(string keywordString)
+        {
+            var keywordStrings = ReadKeywordStrings();
+            if (keywordStrings.Contains(keywordString))
+            {
+                return;
+            }
+            // if user has assigned a category its first keyword then remove the category placeholder string
+            var parts = keywordString.Split(',');
+            var haveKeyword = !string.IsNullOrWhiteSpace(parts[1]);
+            if (haveKeyword)
+            {
+                var categoryString = $"{parts[0]},";
+                keywordStrings.Remove(categoryString);
+            }
+            keywordStrings.Add(keywordString);
+            if (File.Exists(Path))
+            {
+                File.Delete(Path);
+            }
+            using (var writer = new StreamWriter(Path))
+            {
+                foreach (var s in keywordStrings)
+                {
+                    writer.WriteLine(s);
+                }
+            }
         }
     }
 }

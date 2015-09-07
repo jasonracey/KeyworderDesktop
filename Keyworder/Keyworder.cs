@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
 using KeyworderLib;
@@ -45,38 +47,75 @@ namespace Keyworder
 
         private void buttonCreateCategory_Click(object sender, EventArgs e)
         {
-            // todo
-            // data should be stored as xml not csv - there's a 1-to-many relationship
-            // to title case?
-            // don't add category if it already exists
+            if (!textBoxCategory.HasText())
+            {
+                labelCreateCategory.Text = @"Please specify a category.";
+                labelCreateCategory.Visible = true;
+                return;
+            }
+
+            var category = textBoxCategory.CleanText();
+
+            var textInfo = new CultureInfo("en-US", false).TextInfo;
+            category = textInfo.ToTitleCase(category);
+
+            KeywordRepository.CreateCategory(category);
+
+            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
+            InitCreateTab(keywords);
+            RefreshSelectTab(keywords);
+
+            labelCreateCategory.Text = @"Category created!";
+            labelCreateCategory.Visible = true;
         }
 
         private void buttonCreateKeyword_Click(object sender, EventArgs e)
         {
-            // todo
-            // category must be selected
-            // keyword must be specified
-            // to title case?
-            // trim, replace double spaces
-            // don't add keyword if it already exists
+            if (!comboBoxCategory.HasSelection())
+            {
+                labelCreateKeyword.Text = @"Please select a category.";
+                labelCreateKeyword.Visible = true;
+                return;
+            }
+
+            if (!textBoxKeyword.HasText())
+            {
+                labelCreateKeyword.Text = @"Please specify a keyword.";
+                labelCreateKeyword.Visible = true;
+                return;
+            }
+
+            var category = comboBoxCategory.SelectedItem.ToString();
+            var keyword = textBoxKeyword.CleanText();
+
+            var textInfo = new CultureInfo("en-US", false).TextInfo;
+            keyword = textInfo.ToTitleCase(keyword);
+
+            KeywordRepository.CreateKeyword(category, keyword);
+
+            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
+            InitCreateTab(keywords);
+            RefreshSelectTab(keywords);
+
+            labelCreateKeyword.Text = @"Keyword created!";
+            labelCreateKeyword.Visible = true;
         }
 
         private void comboBoxCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // todo
-            // if category is selected and textbox has text then enable button else disable
+            SetCreateTabButtonState();
         }
 
         private void textBoxCategory_TextChanged(object sender, EventArgs e)
         {
-            // todo
-            // if has text then enable button else disable
+            labelCreateCategory.Visible = false;
+            SetCreateTabButtonState();
         }
 
         private void textBoxKeyword_TextChanged(object sender, EventArgs e)
         {
-            // todo
-            // if has text and category is selected then enable button else disable
+            labelCreateKeyword.Visible = false;
+            SetCreateTabButtonState();
         }
 
         private void treeViewAllKeywords_AfterCheck(object sender, TreeViewEventArgs e)
@@ -86,25 +125,8 @@ namespace Keyworder
             {
                 return;
             }
-
-            if (e.Node.Nodes.Count > 0)
-            {
-                NodeHandler.UpdateChildNodes(e.Node, e.Node.Checked);
-            }
-
-            listBoxSelectedKeywords.Items.Clear();
-
-            foreach (TreeNode categoryNode in treeViewAllKeywords.Nodes)
-            {
-                foreach (TreeNode keywordNode in categoryNode.Nodes)
-                {
-                    if (keywordNode.Checked)
-                    {
-                        listBoxSelectedKeywords.Items.Add($"\"{keywordNode.Text}\"");
-                    }
-                }
-            }
-
+            NodeHandler.UpdateChildNodes(e.Node, e.Node.Checked);
+            PopulateListBoxSelectedItems(treeViewAllKeywords.Nodes);
             SetSelectTabButtonState();
             labelKeywordsCopiedToClipboard.Visible = false;
         }
@@ -118,6 +140,8 @@ namespace Keyworder
             }
             textBoxKeyword.Clear();
             textBoxCategory.Clear();
+            labelCreateCategory.Visible = false;
+            labelCreateKeyword.Visible = false;
             SetCreateTabButtonState();
         }
 
@@ -139,12 +163,39 @@ namespace Keyworder
             labelKeywordsCopiedToClipboard.Visible = false;
         }
 
+        private void PopulateListBoxSelectedItems(IEnumerable treeNodes)
+        {
+            listBoxSelectedKeywords.BeginUpdate();
+            listBoxSelectedKeywords.Items.Clear();
+            foreach (TreeNode categoryNode in treeNodes)
+            {
+                foreach (TreeNode keywordNode in categoryNode.Nodes)
+                {
+                    if (keywordNode.Checked)
+                    {
+                        var text = $"\"{keywordNode.Text}\"";
+                        // don't add duplicate keywords even if from different categories
+                        if (!listBoxSelectedKeywords.Items.Contains(text))
+                        {
+                            listBoxSelectedKeywords.Items.Add(text);
+                        }
+                    }
+                }
+            }
+            listBoxSelectedKeywords.EndUpdate();
+        }
+
         private void PopulateTreeViewAllKeywords(SortedDictionary<string, SortedSet<string>> keywords)
         {
             treeViewAllKeywords.BeginUpdate();
             treeViewAllKeywords.Nodes.Clear();
             foreach (var keywordGroup in keywords)
             {
+                // if user created a category but hasn't assigned any keywords to it yet
+                if (keywordGroup.Value.Count == 0)
+                {
+                    continue;
+                }
                 var categoryNode = new TreeNode(keywordGroup.Key);
                 foreach (var keyword in keywordGroup.Value)
                 {
@@ -155,10 +206,18 @@ namespace Keyworder
             treeViewAllKeywords.EndUpdate();
         }
 
+        private void RefreshSelectTab(SortedDictionary<string, SortedSet<string>> keywords)
+        {
+            var state = NodeHandler.GetState(treeViewAllKeywords.Nodes);
+            PopulateTreeViewAllKeywords(keywords);
+            NodeHandler.SetState(treeViewAllKeywords.Nodes, state);
+            PopulateListBoxSelectedItems(treeViewAllKeywords.Nodes);
+        }
+
         private void SetCreateTabButtonState()
         {
-            buttonCreateKeyword.Enabled = textBoxKeyword.Text.Trim() != string.Empty;
-            buttonCreateCategory.Enabled = textBoxCategory.Text.Trim() != string.Empty;
+            buttonCreateKeyword.Enabled = comboBoxCategory.HasSelection() && textBoxKeyword.HasText();
+            buttonCreateCategory.Enabled = textBoxCategory.HasText();
         }
 
         private void SetSelectTabButtonState()

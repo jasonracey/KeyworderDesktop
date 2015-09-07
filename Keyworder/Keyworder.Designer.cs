@@ -41,6 +41,7 @@ namespace Keyworder
             this.buttonClearSelections = new System.Windows.Forms.Button();
             this.tabCreate = new System.Windows.Forms.TabPage();
             this.groupBoxCreateCategories = new System.Windows.Forms.GroupBox();
+            this.labelCreateCategory = new System.Windows.Forms.Label();
             this.buttonCreateCategory = new System.Windows.Forms.Button();
             this.textBoxCategory = new System.Windows.Forms.TextBox();
             this.labelCategory = new System.Windows.Forms.Label();
@@ -52,6 +53,7 @@ namespace Keyworder
             this.labelCategoryForKeyword = new System.Windows.Forms.Label();
             this.tabEdit = new System.Windows.Forms.TabPage();
             this.tabDelete = new System.Windows.Forms.TabPage();
+            this.labelCreateKeyword = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabSelect.SuspendLayout();
             this.tabCreate.SuspendLayout();
@@ -171,6 +173,7 @@ namespace Keyworder
             // 
             // groupBoxCreateCategories
             // 
+            this.groupBoxCreateCategories.Controls.Add(this.labelCreateCategory);
             this.groupBoxCreateCategories.Controls.Add(this.buttonCreateCategory);
             this.groupBoxCreateCategories.Controls.Add(this.textBoxCategory);
             this.groupBoxCreateCategories.Controls.Add(this.labelCategory);
@@ -180,6 +183,15 @@ namespace Keyworder
             this.groupBoxCreateCategories.TabIndex = 1;
             this.groupBoxCreateCategories.TabStop = false;
             this.groupBoxCreateCategories.Text = "Create Categories";
+            // 
+            // labelCreateCategory
+            // 
+            this.labelCreateCategory.AutoSize = true;
+            this.labelCreateCategory.Location = new System.Drawing.Point(289, 61);
+            this.labelCreateCategory.Name = "labelCreateCategory";
+            this.labelCreateCategory.Size = new System.Drawing.Size(91, 13);
+            this.labelCreateCategory.TabIndex = 9;
+            this.labelCreateCategory.Text = "Category created!";
             // 
             // buttonCreateCategory
             // 
@@ -210,6 +222,7 @@ namespace Keyworder
             // 
             // groupBoxCreateKeywords
             // 
+            this.groupBoxCreateKeywords.Controls.Add(this.labelCreateKeyword);
             this.groupBoxCreateKeywords.Controls.Add(this.buttonCreateKeyword);
             this.groupBoxCreateKeywords.Controls.Add(this.textBoxKeyword);
             this.groupBoxCreateKeywords.Controls.Add(this.comboBoxCategory);
@@ -285,6 +298,15 @@ namespace Keyworder
             this.tabDelete.Text = "Delete";
             this.tabDelete.UseVisualStyleBackColor = true;
             // 
+            // labelCreateKeyword
+            // 
+            this.labelCreateKeyword.AutoSize = true;
+            this.labelCreateKeyword.Location = new System.Drawing.Point(289, 88);
+            this.labelCreateKeyword.Name = "labelCreateKeyword";
+            this.labelCreateKeyword.Size = new System.Drawing.Size(90, 13);
+            this.labelCreateKeyword.TabIndex = 10;
+            this.labelCreateKeyword.Text = "Keyword created!";
+            // 
             // Keyworder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -331,6 +353,8 @@ namespace Keyworder
         private System.Windows.Forms.Label labelKeyword;
         private System.Windows.Forms.Label labelCategoryForKeyword;
         private System.Windows.Forms.Label labelKeywordsCopiedToClipboard;
+        private System.Windows.Forms.Label labelCreateCategory;
+        private System.Windows.Forms.Label labelCreateKeyword;
     }
 }
 
