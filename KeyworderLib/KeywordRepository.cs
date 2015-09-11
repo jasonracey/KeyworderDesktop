@@ -1,177 +1,156 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace KeyworderLib
 {
     public static class KeywordRepository
     {
-        private const string Path = @"Keywords.csv";
+        private const string Path = @"Keywords.xml";
 
-        public static void CreateCategory(string category)
+        public static void CreateKeyword(string categoryId, string keywordId)
         {
-            if (string.IsNullOrWhiteSpace(category))
+            if (string.IsNullOrWhiteSpace(categoryId))
             {
-                throw new ArgumentException("category is required", nameof(category));
+                throw new ArgumentException("categoryId is required", nameof(categoryId));
             }
-            var categoryString = $"{category},";
-            var keywordStrings = ReadKeywordStrings();
-            if (keywordStrings.Any(keywordString => keywordString.StartsWith(categoryString)))
+            if (string.IsNullOrWhiteSpace(keywordId))
             {
-                return;
+                throw new ArgumentException("keywordId is required", nameof(keywordId));
             }
-            keywordStrings.Add(categoryString);
-            WriteKeywordStrings(keywordStrings);
+            var document = XDocument.Load(Path);
+            var category = document.Descendants("Category")
+                .Single(d => d.Attribute("CategoryId").Value == categoryId);
+            if (category.Descendants("Keyword")
+                .Count(d => d.Attribute("KeywordId").Value == keywordId) == 0)
+            {
+                category.Add(new XElement("Keyword", new XAttribute("KeywordId", keywordId)));
+                document.Save(Path);
+            }
         }
 
-        public static void CreateKeyword(string category, string keyword)
+        public static void CreateCategory(string categoryId)
         {
-            if (string.IsNullOrWhiteSpace(category))
+            if (string.IsNullOrWhiteSpace(categoryId))
             {
-                throw new ArgumentException("category is required", nameof(category));
+                throw new ArgumentException("categoryId is required", nameof(categoryId));
             }
-            if (string.IsNullOrWhiteSpace(keyword))
+            var document = XDocument.Load(Path);
+            if (document.Descendants("Category")
+                .Count(d => d.Attribute("CategoryId").Value == categoryId) == 0)
             {
-                throw new ArgumentException("keyword is required", nameof(keyword));
+                document.Root?.Add(new XElement("Category", new XAttribute("CategoryId", categoryId)));
+                document.Save(Path);
             }
-            var keywordString = $"{category},{keyword}";
-            var keywordStrings = ReadKeywordStrings();
-            if (keywordStrings.Any(s => s == keywordString))
-            {
-                return;
-            }
-            // if user has assigned a category its first keyword then remove the category placeholder string
-            var categoryString = $"{keywordString.Split(',')[0]},";
-            keywordStrings.Remove(categoryString);
-            keywordStrings.Add(keywordString);
-            WriteKeywordStrings(keywordStrings);
         }
 
-        public static void DeleteCategory(string category)
+        public static void DeleteKeyword(string categoryId, string keywordId)
         {
-            if (string.IsNullOrWhiteSpace(category))
+            if (string.IsNullOrWhiteSpace(categoryId))
             {
-                throw new ArgumentException("category is required", nameof(category));
+                throw new ArgumentException("categoryId is required", nameof(categoryId));
             }
-            var keywordStrings = ReadKeywordStrings();
-            keywordStrings.RemoveWhere(s => s.StartsWith($"{category},"));
-            WriteKeywordStrings(keywordStrings);
+            if (string.IsNullOrWhiteSpace(keywordId))
+            {
+                throw new ArgumentException("keywordId is required", nameof(keywordId));
+            }
+            var document = XDocument.Load(Path);
+            if (document.Descendants("Category")
+                    .Single(d => d.Attribute("CategoryId").Value == categoryId)
+                    .Descendants("Keyword")
+                    .Count(d => d.Attribute("KeywordId").Value == keywordId) > 0)
+            {
+                document.Descendants("Category")
+                    .Single(d => d.Attribute("CategoryId").Value == categoryId)
+                    .Descendants("Keyword")
+                    .Single(d => d.Attribute("KeywordId").Value == keywordId)
+                    .Remove();
+                document.Save(Path);
+            }
         }
 
-        public static void DeleteKeyword(string keyword)
+        public static void DeleteCategory(string categoryId)
         {
-            if (string.IsNullOrWhiteSpace(keyword))
+            if (string.IsNullOrWhiteSpace(categoryId))
             {
-                throw new ArgumentException("keyword is required", nameof(keyword));
+                throw new ArgumentException("categoryId is required", nameof(categoryId));
             }
-            
-            var keywordStrings = ReadKeywordStrings();
-            // don't delete the category if there's no more keywords in it
-            var searchString = $",{keyword}";
-            var matchingKeywordStrings = keywordStrings.Where(s => s.EndsWith(searchString));
-            var categoriesOfMatchingKeywordStrings = new Dictionary<string,string>();
-            foreach (var matchingKeywordString in matchingKeywordStrings)
+            var document = XDocument.Load(Path);
+            if (document.Descendants("Category")
+                .Count(d => d.Attribute("CategoryId").Value == categoryId) > 0)
             {
-                var parts = matchingKeywordString.Split(',');
-                if (!categoriesOfMatchingKeywordStrings.ContainsKey(parts[0]))
+                document.Descendants("Category")
+                    .Single(d => d.Attribute("CategoryId").Value == categoryId)
+                    .Remove();
+                document.Save(Path);
+            }
+        }
+
+        public static SortedSet<Category> GetCategories()
+        {
+            var categories = new SortedSet<Category>(new CategoryComparer());
+            foreach (var categoryNode in XDocument.Load(Path).Descendants("Category"))
+            {
+                var categoryId = categoryNode.Attribute("CategoryId").Value;
+                var category = new Category(categoryId);
+                foreach (var keywordNode in categoryNode.Elements("Keyword"))
                 {
-                    categoriesOfMatchingKeywordStrings.Add(parts[0], null);
+                    var keywordId = keywordNode.Attribute("KeywordId").Value;
+                    category.Keywords.Add(new Keyword(categoryId, keywordId));
                 }
+                categories.Add(category);
             }
-            keywordStrings.RemoveWhere(s => s.EndsWith(searchString));
-            foreach (var category in categoriesOfMatchingKeywordStrings.Keys)
-            {
-                keywordStrings.Add($"{category},");
-            }
-            WriteKeywordStrings(keywordStrings);
+            return categories;
         }
 
-        public static void EditCategory(string oldValue, string newValue)
+        public static void UpdateKeyword(string categoryId, string oldKeywordId, string newKeywordId)
         {
-            if (string.IsNullOrWhiteSpace(oldValue))
+            if (string.IsNullOrWhiteSpace(categoryId))
             {
-                throw new ArgumentException("oldValue is required", nameof(oldValue));
+                throw new ArgumentException("categoryId is required", nameof(categoryId));
             }
-            if (string.IsNullOrWhiteSpace(newValue))
+            if (string.IsNullOrWhiteSpace(oldKeywordId))
             {
-                throw new ArgumentException("newValue is required", nameof(newValue));
+                throw new ArgumentException("oldKeywordId is required", nameof(oldKeywordId));
             }
-            EditItems($"{oldValue},", $"{newValue},");
+            if (string.IsNullOrWhiteSpace(newKeywordId))
+            {
+                throw new ArgumentException("newKeywordId is required", nameof(newKeywordId));
+            }
+            var document = XDocument.Load(Path);
+            var keyword = document.Descendants("Category")
+                .Single(d => d.Attribute("CategoryId").Value == categoryId)
+                .Descendants("Keyword")
+                .SingleOrDefault(d => d.Attribute("KeywordId").Value == oldKeywordId);
+            if (keyword == null)
+            {
+                throw new ArgumentException("keyword not found", oldKeywordId);
+            }
+            keyword.SetAttributeValue("KeywordId", newKeywordId);
+            document.Save(Path);
         }
 
-        public static void EditKeyword(string oldValue, string newValue)
+        public static void UpdateCategory(string oldCategoryId, string newCategoryId)
         {
-            if (string.IsNullOrWhiteSpace(oldValue))
+            if (string.IsNullOrWhiteSpace(oldCategoryId))
             {
-                throw new ArgumentException("oldValue is required", nameof(oldValue));
+                throw new ArgumentException("oldCategoryId is required", nameof(oldCategoryId));
             }
-            if (string.IsNullOrWhiteSpace(newValue))
+            if (string.IsNullOrWhiteSpace(newCategoryId))
             {
-                throw new ArgumentException("newValue is required", nameof(newValue));
+                throw new ArgumentException("newCategoryId is required", nameof(newCategoryId));
             }
-            EditItems($",{oldValue}", $",{newValue}");
-        }
-
-        public static SortedDictionary<string, SortedSet<string>> GetKeywordsGroupedByCategory()
-        {
-            var keywordsGroupedByCategory = new SortedDictionary<string, SortedSet<string>>();
-            foreach (var keywordString in ReadKeywordStrings())
+            var document = XDocument.Load(Path);
+            var category = document.Descendants("Category")
+                .SingleOrDefault(d => d.Attribute("CategoryId")
+                .Value == oldCategoryId);
+            if (category == null)
             {
-                var parts = keywordString.Split(',');
-                var category = parts[0];
-                var keyword = parts.Length == 2 ? parts[1] : string.Empty;
-                if (!keywordsGroupedByCategory.ContainsKey(category))
-                {
-                    keywordsGroupedByCategory.Add(category, new SortedSet<string>());
-                }
-                if (!string.IsNullOrWhiteSpace(keyword))
-                {
-                    keywordsGroupedByCategory[category].Add(keyword);
-                }
+                throw new ArgumentException("category not found", oldCategoryId);
             }
-            return keywordsGroupedByCategory;
-        }
-
-        private static void EditItems(string oldValue, string newValue)
-        {
-            var newKeywordStrings = new SortedSet<string>();
-            var oldKeywordStrings = ReadKeywordStrings();
-            foreach (var oldKeywordString in oldKeywordStrings)
-            {
-                var newKeywordString = oldKeywordString.Replace(oldValue, newValue);
-                newKeywordStrings.Add(newKeywordString);
-            }
-            WriteKeywordStrings(newKeywordStrings);
-        }
-
-        private static SortedSet<string> ReadKeywordStrings()
-        {
-            var keywordStrings = new SortedSet<string>();
-            using (var reader = new StreamReader(Path))
-            {
-                string keywordString;
-                while ((keywordString = reader.ReadLine()) != null)
-                {
-                    keywordStrings.Add(keywordString);
-                }
-            }
-            return keywordStrings;
-        }
-
-        private static void WriteKeywordStrings(IEnumerable<string> keywordStrings)
-        {
-            if (File.Exists(Path))
-            {
-                File.Delete(Path);
-            }
-            using (var writer = new StreamWriter(Path))
-            {
-                foreach (var s in keywordStrings)
-                {
-                    writer.WriteLine(s);
-                }
-            }
+            category.SetAttributeValue("CategoryId", newCategoryId);
+            document.Save(Path);
         }
     }
 }

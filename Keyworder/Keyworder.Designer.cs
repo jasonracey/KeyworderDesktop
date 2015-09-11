@@ -68,16 +68,16 @@ namespace Keyworder
             this.labelKeywordEdit = new System.Windows.Forms.Label();
             this.labelKeywordToEdit = new System.Windows.Forms.Label();
             this.tabDelete = new System.Windows.Forms.TabPage();
-            this.groupBoxDeleteKeywords = new System.Windows.Forms.GroupBox();
-            this.labelDeleteKeywordMessage = new System.Windows.Forms.Label();
-            this.buttonDeleteKeyword = new System.Windows.Forms.Button();
-            this.comboBoxDeleteKeyword = new System.Windows.Forms.ComboBox();
-            this.labelDeleteKeyword = new System.Windows.Forms.Label();
             this.groupBoxDeleteCategories = new System.Windows.Forms.GroupBox();
             this.labelDeleteCategoryMessage = new System.Windows.Forms.Label();
             this.buttonDeleteCategory = new System.Windows.Forms.Button();
             this.comboBoxDeleteCategory = new System.Windows.Forms.ComboBox();
             this.labelDeleteCategory = new System.Windows.Forms.Label();
+            this.groupBoxDeleteKeywords = new System.Windows.Forms.GroupBox();
+            this.labelDeleteKeywordMessage = new System.Windows.Forms.Label();
+            this.buttonDeleteKeyword = new System.Windows.Forms.Button();
+            this.comboBoxDeleteKeyword = new System.Windows.Forms.ComboBox();
+            this.labelDeleteKeyword = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabSelect.SuspendLayout();
             this.tabCreate.SuspendLayout();
@@ -87,8 +87,8 @@ namespace Keyworder
             this.groupBoxEditCategories.SuspendLayout();
             this.groupBoxEditKeywords.SuspendLayout();
             this.tabDelete.SuspendLayout();
-            this.groupBoxDeleteKeywords.SuspendLayout();
             this.groupBoxDeleteCategories.SuspendLayout();
+            this.groupBoxDeleteKeywords.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonCopyToClipboard
@@ -294,10 +294,12 @@ namespace Keyworder
             // 
             // comboBoxCategoryOfKeywordToCreate
             // 
+            this.comboBoxCategoryOfKeywordToCreate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxCategoryOfKeywordToCreate.FormattingEnabled = true;
             this.comboBoxCategoryOfKeywordToCreate.Location = new System.Drawing.Point(61, 30);
             this.comboBoxCategoryOfKeywordToCreate.Name = "comboBoxCategoryOfKeywordToCreate";
             this.comboBoxCategoryOfKeywordToCreate.Size = new System.Drawing.Size(400, 21);
+            this.comboBoxCategoryOfKeywordToCreate.Sorted = true;
             this.comboBoxCategoryOfKeywordToCreate.TabIndex = 2;
             this.comboBoxCategoryOfKeywordToCreate.SelectedIndexChanged += new System.EventHandler(this.comboBoxCategoryOfKeywordToCreate_SelectedIndexChanged);
             // 
@@ -374,10 +376,12 @@ namespace Keyworder
             // 
             // comboBoxEditCategory
             // 
+            this.comboBoxEditCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxEditCategory.FormattingEnabled = true;
             this.comboBoxEditCategory.Location = new System.Drawing.Point(61, 30);
             this.comboBoxEditCategory.Name = "comboBoxEditCategory";
             this.comboBoxEditCategory.Size = new System.Drawing.Size(400, 21);
+            this.comboBoxEditCategory.Sorted = true;
             this.comboBoxEditCategory.TabIndex = 2;
             this.comboBoxEditCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxEditCategory_SelectedIndexChanged);
             // 
@@ -443,10 +447,12 @@ namespace Keyworder
             // 
             // comboBoxEditKeyword
             // 
+            this.comboBoxEditKeyword.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxEditKeyword.FormattingEnabled = true;
             this.comboBoxEditKeyword.Location = new System.Drawing.Point(61, 30);
             this.comboBoxEditKeyword.Name = "comboBoxEditKeyword";
             this.comboBoxEditKeyword.Size = new System.Drawing.Size(400, 21);
+            this.comboBoxEditKeyword.Sorted = true;
             this.comboBoxEditKeyword.TabIndex = 2;
             this.comboBoxEditKeyword.SelectedIndexChanged += new System.EventHandler(this.comboBoxEditKeyword_SelectedIndexChanged);
             // 
@@ -478,56 +484,6 @@ namespace Keyworder
             this.tabDelete.TabIndex = 3;
             this.tabDelete.Text = "Delete";
             this.tabDelete.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxDeleteKeywords
-            // 
-            this.groupBoxDeleteKeywords.Controls.Add(this.labelDeleteKeywordMessage);
-            this.groupBoxDeleteKeywords.Controls.Add(this.buttonDeleteKeyword);
-            this.groupBoxDeleteKeywords.Controls.Add(this.comboBoxDeleteKeyword);
-            this.groupBoxDeleteKeywords.Controls.Add(this.labelDeleteKeyword);
-            this.groupBoxDeleteKeywords.Location = new System.Drawing.Point(6, 6);
-            this.groupBoxDeleteKeywords.Name = "groupBoxDeleteKeywords";
-            this.groupBoxDeleteKeywords.Size = new System.Drawing.Size(639, 240);
-            this.groupBoxDeleteKeywords.TabIndex = 2;
-            this.groupBoxDeleteKeywords.TabStop = false;
-            this.groupBoxDeleteKeywords.Text = "Delete Keywords";
-            // 
-            // labelDeleteKeywordMessage
-            // 
-            this.labelDeleteKeywordMessage.AutoSize = true;
-            this.labelDeleteKeywordMessage.Location = new System.Drawing.Point(289, 62);
-            this.labelDeleteKeywordMessage.Name = "labelDeleteKeywordMessage";
-            this.labelDeleteKeywordMessage.Size = new System.Drawing.Size(89, 13);
-            this.labelDeleteKeywordMessage.TabIndex = 10;
-            this.labelDeleteKeywordMessage.Text = "Keyword deleted!";
-            // 
-            // buttonDeleteKeyword
-            // 
-            this.buttonDeleteKeyword.Location = new System.Drawing.Point(386, 57);
-            this.buttonDeleteKeyword.Name = "buttonDeleteKeyword";
-            this.buttonDeleteKeyword.Size = new System.Drawing.Size(75, 23);
-            this.buttonDeleteKeyword.TabIndex = 4;
-            this.buttonDeleteKeyword.Text = "Delete";
-            this.buttonDeleteKeyword.UseVisualStyleBackColor = true;
-            this.buttonDeleteKeyword.Click += new System.EventHandler(this.buttonDeleteKeyword_Click);
-            // 
-            // comboBoxDeleteKeyword
-            // 
-            this.comboBoxDeleteKeyword.FormattingEnabled = true;
-            this.comboBoxDeleteKeyword.Location = new System.Drawing.Point(61, 30);
-            this.comboBoxDeleteKeyword.Name = "comboBoxDeleteKeyword";
-            this.comboBoxDeleteKeyword.Size = new System.Drawing.Size(400, 21);
-            this.comboBoxDeleteKeyword.TabIndex = 2;
-            this.comboBoxDeleteKeyword.SelectedIndexChanged += new System.EventHandler(this.comboBoxDeleteKeyword_SelectedIndexChanged);
-            // 
-            // labelDeleteKeyword
-            // 
-            this.labelDeleteKeyword.AutoSize = true;
-            this.labelDeleteKeyword.Location = new System.Drawing.Point(7, 30);
-            this.labelDeleteKeyword.Name = "labelDeleteKeyword";
-            this.labelDeleteKeyword.Size = new System.Drawing.Size(48, 13);
-            this.labelDeleteKeyword.TabIndex = 0;
-            this.labelDeleteKeyword.Text = "Keyword";
             // 
             // groupBoxDeleteCategories
             // 
@@ -563,10 +519,12 @@ namespace Keyworder
             // 
             // comboBoxDeleteCategory
             // 
+            this.comboBoxDeleteCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDeleteCategory.FormattingEnabled = true;
             this.comboBoxDeleteCategory.Location = new System.Drawing.Point(61, 30);
             this.comboBoxDeleteCategory.Name = "comboBoxDeleteCategory";
             this.comboBoxDeleteCategory.Size = new System.Drawing.Size(400, 21);
+            this.comboBoxDeleteCategory.Sorted = true;
             this.comboBoxDeleteCategory.TabIndex = 2;
             this.comboBoxDeleteCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxDeleteCategory_SelectedIndexChanged);
             // 
@@ -578,6 +536,58 @@ namespace Keyworder
             this.labelDeleteCategory.Size = new System.Drawing.Size(49, 13);
             this.labelDeleteCategory.TabIndex = 0;
             this.labelDeleteCategory.Text = "Category";
+            // 
+            // groupBoxDeleteKeywords
+            // 
+            this.groupBoxDeleteKeywords.Controls.Add(this.labelDeleteKeywordMessage);
+            this.groupBoxDeleteKeywords.Controls.Add(this.buttonDeleteKeyword);
+            this.groupBoxDeleteKeywords.Controls.Add(this.comboBoxDeleteKeyword);
+            this.groupBoxDeleteKeywords.Controls.Add(this.labelDeleteKeyword);
+            this.groupBoxDeleteKeywords.Location = new System.Drawing.Point(6, 6);
+            this.groupBoxDeleteKeywords.Name = "groupBoxDeleteKeywords";
+            this.groupBoxDeleteKeywords.Size = new System.Drawing.Size(639, 240);
+            this.groupBoxDeleteKeywords.TabIndex = 2;
+            this.groupBoxDeleteKeywords.TabStop = false;
+            this.groupBoxDeleteKeywords.Text = "Delete Keywords";
+            // 
+            // labelDeleteKeywordMessage
+            // 
+            this.labelDeleteKeywordMessage.AutoSize = true;
+            this.labelDeleteKeywordMessage.Location = new System.Drawing.Point(289, 62);
+            this.labelDeleteKeywordMessage.Name = "labelDeleteKeywordMessage";
+            this.labelDeleteKeywordMessage.Size = new System.Drawing.Size(89, 13);
+            this.labelDeleteKeywordMessage.TabIndex = 10;
+            this.labelDeleteKeywordMessage.Text = "Keyword deleted!";
+            // 
+            // buttonDeleteKeyword
+            // 
+            this.buttonDeleteKeyword.Location = new System.Drawing.Point(386, 57);
+            this.buttonDeleteKeyword.Name = "buttonDeleteKeyword";
+            this.buttonDeleteKeyword.Size = new System.Drawing.Size(75, 23);
+            this.buttonDeleteKeyword.TabIndex = 4;
+            this.buttonDeleteKeyword.Text = "Delete";
+            this.buttonDeleteKeyword.UseVisualStyleBackColor = true;
+            this.buttonDeleteKeyword.Click += new System.EventHandler(this.buttonDeleteKeyword_Click);
+            // 
+            // comboBoxDeleteKeyword
+            // 
+            this.comboBoxDeleteKeyword.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxDeleteKeyword.FormattingEnabled = true;
+            this.comboBoxDeleteKeyword.Location = new System.Drawing.Point(61, 30);
+            this.comboBoxDeleteKeyword.Name = "comboBoxDeleteKeyword";
+            this.comboBoxDeleteKeyword.Size = new System.Drawing.Size(400, 21);
+            this.comboBoxDeleteKeyword.Sorted = true;
+            this.comboBoxDeleteKeyword.TabIndex = 2;
+            this.comboBoxDeleteKeyword.SelectedIndexChanged += new System.EventHandler(this.comboBoxDeleteKeyword_SelectedIndexChanged);
+            // 
+            // labelDeleteKeyword
+            // 
+            this.labelDeleteKeyword.AutoSize = true;
+            this.labelDeleteKeyword.Location = new System.Drawing.Point(7, 30);
+            this.labelDeleteKeyword.Name = "labelDeleteKeyword";
+            this.labelDeleteKeyword.Size = new System.Drawing.Size(48, 13);
+            this.labelDeleteKeyword.TabIndex = 0;
+            this.labelDeleteKeyword.Text = "Keyword";
             // 
             // Keyworder
             // 
@@ -603,10 +613,10 @@ namespace Keyworder
             this.groupBoxEditKeywords.ResumeLayout(false);
             this.groupBoxEditKeywords.PerformLayout();
             this.tabDelete.ResumeLayout(false);
-            this.groupBoxDeleteKeywords.ResumeLayout(false);
-            this.groupBoxDeleteKeywords.PerformLayout();
             this.groupBoxDeleteCategories.ResumeLayout(false);
             this.groupBoxDeleteCategories.PerformLayout();
+            this.groupBoxDeleteKeywords.ResumeLayout(false);
+            this.groupBoxDeleteKeywords.PerformLayout();
             this.ResumeLayout(false);
 
         }

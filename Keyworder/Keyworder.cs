@@ -18,17 +18,17 @@ namespace Keyworder
 
         private void Keyworder_Load(object sender, EventArgs e)
         {
-            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
-            InitCreateTab(keywords);
-            InitDeleteTab(keywords);
-            InitEditTab(keywords);
-            InitSelectTab(keywords);
+            var categories = KeywordRepository.GetCategories();
+            InitCreateTab(categories);
+            InitDeleteTab(categories);
+            InitEditTab(categories);
+            InitSelectTab(categories);
         }
 
         private void buttonClearSelections_Click(object sender, EventArgs e)
         {
-            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
-            InitSelectTab(keywords);
+            var categories = KeywordRepository.GetCategories();
+            InitSelectTab(categories);
         }
 
         private void buttonCopyToClipboard_Click(object sender, EventArgs e)
@@ -124,7 +124,8 @@ namespace Keyworder
                 return;
             }
 
-            KeywordRepository.DeleteKeyword(comboBoxDeleteKeyword.SelectedItem.ToString());
+            var keyword = (Keyword)((ComboBoxItem)comboBoxDeleteKeyword.SelectedItem).Value;
+            KeywordRepository.DeleteKeyword(keyword.CategoryId, keyword.KeywordId);
 
             ReloadForm();
 
@@ -154,7 +155,7 @@ namespace Keyworder
             var textInfo = new CultureInfo("en-US", false).TextInfo;
             newValue = textInfo.ToTitleCase(newValue);
 
-            KeywordRepository.EditCategory(oldValue, newValue);
+            KeywordRepository.UpdateCategory(oldValue, newValue);
 
             ReloadForm();
 
@@ -178,13 +179,13 @@ namespace Keyworder
                 return;
             }
 
-            var oldValue = comboBoxEditKeyword.SelectedItem.ToString();
-            var newValue = textBoxEditKeyword.CleanText();
+            var oldKeyword = (Keyword)((ComboBoxItem)comboBoxDeleteKeyword.SelectedItem).Value;
+            var newKeywordId = textBoxEditKeyword.CleanText();
 
             var textInfo = new CultureInfo("en-US", false).TextInfo;
-            newValue = textInfo.ToTitleCase(newValue);
+            newKeywordId = textInfo.ToTitleCase(newKeywordId);
 
-            KeywordRepository.EditKeyword(oldValue, newValue);
+            KeywordRepository.UpdateKeyword(oldKeyword.CategoryId, oldKeyword.KeywordId, newKeywordId);
 
             ReloadForm();
 
@@ -256,12 +257,12 @@ namespace Keyworder
             labelKeywordsCopiedToClipboard.Visible = false;
         }
 
-        private void InitCreateTab(SortedDictionary<string, SortedSet<string>> keywords)
+        private void InitCreateTab(IEnumerable<Category> categories)
         {
             comboBoxCategoryOfKeywordToCreate.Items.Clear();
-            foreach (var keyValuePair in keywords)
+            foreach (var category in categories)
             {
-                comboBoxCategoryOfKeywordToCreate.Items.Add(keyValuePair.Key);
+                comboBoxCategoryOfKeywordToCreate.Items.Add(category.CategoryId);
             }
             comboBoxCategoryOfKeywordToCreate.SelectedIndex = 0;
             textBoxCreateKeyword.Clear();
@@ -271,20 +272,23 @@ namespace Keyworder
             SetCreateTabButtonState();
         }
 
-        private void InitDeleteTab(SortedDictionary<string, SortedSet<string>> keywords)
+        private void InitDeleteTab(SortedSet<Category> categories)
         {
             comboBoxDeleteKeyword.Items.Clear();
-            var distinctKeywords = keywords.Values.SelectMany(k => k).Distinct().ToList();
-            distinctKeywords.Sort();
-            foreach (var kwd in distinctKeywords)
+            foreach (var keyword in categories.SelectMany(kc => kc.Keywords))
             {
-                comboBoxDeleteKeyword.Items.Add(kwd);
+                var comboboxItem = new ComboBoxItem
+                {
+                    Text = keyword.KeywordId,
+                    Value = keyword
+                };
+                comboBoxDeleteKeyword.Items.Add(comboboxItem);
             }
             comboBoxDeleteKeyword.SelectedIndex = 0;
             comboBoxDeleteCategory.Items.Clear();
-            foreach (var cat in keywords.Keys)
+            foreach (var category in categories)
             {
-                comboBoxDeleteCategory.Items.Add(cat);
+                comboBoxDeleteCategory.Items.Add(category.CategoryId);
             }
             comboBoxDeleteCategory.SelectedIndex = 0;
             labelDeleteCategoryMessage.Visible = false;
@@ -292,32 +296,35 @@ namespace Keyworder
             SetDeleteTabButtonState();
         }
 
-        private void InitEditTab(SortedDictionary<string, SortedSet<string>> keywords)
+        private void InitEditTab(SortedSet<Category> categories)
         {
             comboBoxEditKeyword.Items.Clear();
-            var distinctKeywords = keywords.Values.SelectMany(k => k).Distinct().ToList();
-            distinctKeywords.Sort();
-            foreach (var kwd in distinctKeywords)
+            foreach (var keyword in categories.SelectMany(kc => kc.Keywords))
             {
-                comboBoxEditKeyword.Items.Add(kwd);
+                var comboboxItem = new ComboBoxItem
+                {
+                    Text = keyword.KeywordId,
+                    Value = keyword
+                };
+                comboBoxEditKeyword.Items.Add(comboboxItem);
             }
             comboBoxEditKeyword.SelectedIndex = 0;
+            textBoxEditKeyword.Text = ((ComboBoxItem)comboBoxEditKeyword.SelectedItem).Text;
             comboBoxEditCategory.Items.Clear();
-            foreach (var cat in keywords.Keys)
+            foreach (var category in categories)
             {
-                comboBoxEditCategory.Items.Add(cat);
+                comboBoxEditCategory.Items.Add(category.CategoryId);
             }
             comboBoxEditCategory.SelectedIndex = 0;
-            textBoxEditKeyword.Clear();
-            textBoxEditCategory.Clear();
+            textBoxEditCategory.Text = comboBoxEditCategory.SelectedItem.ToString();
             labelEditCategoryMessage.Visible = false;
             labelEditKeywordMessage.Visible = false;
             SetEditTabButtonState();
         }
 
-        private void InitSelectTab(SortedDictionary<string, SortedSet<string>> keywords)
+        private void InitSelectTab(IEnumerable<Category> categories)
         {
-            PopulateTreeViewAllKeywords(keywords);
+            PopulateTreeViewAllKeywords(categories);
             listBoxSelectedKeywords.Items.Clear();
             SetSelectTabButtonState();
             labelKeywordsCopiedToClipboard.Visible = false;
@@ -345,42 +352,42 @@ namespace Keyworder
             listBoxSelectedKeywords.EndUpdate();
         }
 
-        private void PopulateTreeViewAllKeywords(SortedDictionary<string, SortedSet<string>> keywords)
+        private void PopulateTreeViewAllKeywords(IEnumerable<Category> categories)
         {
             treeViewAllKeywords.BeginUpdate();
             treeViewAllKeywords.Nodes.Clear();
-            foreach (var keywordGroup in keywords)
+            foreach (var category in categories)
             {
                 // if user created a category but hasn't assigned any keywords to it yet
-                if (keywordGroup.Value.Count == 0)
+                if (category.Keywords.Count == 0)
                 {
                     continue;
                 }
-                var categoryNode = new TreeNode(keywordGroup.Key);
-                foreach (var keyword in keywordGroup.Value)
+                var categoryNode = new TreeNode(category.CategoryId);
+                foreach (var keyword in category.Keywords)
                 {
-                    categoryNode.Nodes.Add(keyword);
+                    categoryNode.Nodes.Add(keyword.KeywordId);
                 }
                 treeViewAllKeywords.Nodes.Add(categoryNode);
             }
             treeViewAllKeywords.EndUpdate();
         }
 
-        private void RefreshSelectTab(SortedDictionary<string, SortedSet<string>> keywords)
+        private void RefreshSelectTab(SortedSet<Category> categories)
         {
             var state = NodeHandler.GetState(treeViewAllKeywords.Nodes);
-            PopulateTreeViewAllKeywords(keywords);
+            PopulateTreeViewAllKeywords(categories);
             NodeHandler.SetState(treeViewAllKeywords.Nodes, state);
             PopulateListBoxSelectedItems(treeViewAllKeywords.Nodes);
         }
 
         private void ReloadForm()
         {
-            var keywords = KeywordRepository.GetKeywordsGroupedByCategory();
-            InitCreateTab(keywords);
-            InitDeleteTab(keywords);
-            InitEditTab(keywords);
-            RefreshSelectTab(keywords);
+            var categories = KeywordRepository.GetCategories();
+            InitCreateTab(categories);
+            InitDeleteTab(categories);
+            InitEditTab(categories);
+            RefreshSelectTab(categories);
         }
 
         private void SetCreateTabButtonState()
