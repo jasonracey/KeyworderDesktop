@@ -164,9 +164,9 @@ namespace Keyworder
             this.labelKeywordsCopiedToClipboard.AutoSize = true;
             this.labelKeywordsCopiedToClipboard.Location = new System.Drawing.Point(264, 486);
             this.labelKeywordsCopiedToClipboard.Name = "labelKeywordsCopiedToClipboard";
-            this.labelKeywordsCopiedToClipboard.Size = new System.Drawing.Size(149, 13);
+            this.labelKeywordsCopiedToClipboard.Size = new System.Drawing.Size(145, 13);
             this.labelKeywordsCopiedToClipboard.TabIndex = 8;
-            this.labelKeywordsCopiedToClipboard.Text = "Keywords copied to clipboard!";
+            this.labelKeywordsCopiedToClipboard.Text = "keywords copied to clipboard";
             // 
             // listBoxSelectedKeywords
             // 
@@ -219,9 +219,9 @@ namespace Keyworder
             this.labelCreateCategoryMessage.AutoSize = true;
             this.labelCreateCategoryMessage.Location = new System.Drawing.Point(289, 61);
             this.labelCreateCategoryMessage.Name = "labelCreateCategoryMessage";
-            this.labelCreateCategoryMessage.Size = new System.Drawing.Size(91, 13);
+            this.labelCreateCategoryMessage.Size = new System.Drawing.Size(87, 13);
             this.labelCreateCategoryMessage.TabIndex = 9;
-            this.labelCreateCategoryMessage.Text = "Category created!";
+            this.labelCreateCategoryMessage.Text = "category created";
             // 
             // buttonCreateCategory
             // 
@@ -270,9 +270,9 @@ namespace Keyworder
             this.labelCreateKeywordMessage.AutoSize = true;
             this.labelCreateKeywordMessage.Location = new System.Drawing.Point(289, 88);
             this.labelCreateKeywordMessage.Name = "labelCreateKeywordMessage";
-            this.labelCreateKeywordMessage.Size = new System.Drawing.Size(90, 13);
+            this.labelCreateKeywordMessage.Size = new System.Drawing.Size(86, 13);
             this.labelCreateKeywordMessage.TabIndex = 10;
-            this.labelCreateKeywordMessage.Text = "Keyword created!";
+            this.labelCreateKeywordMessage.Text = "keyword created";
             // 
             // buttonCreateKeyword
             // 
@@ -352,9 +352,9 @@ namespace Keyworder
             this.labelEditCategoryMessage.AutoSize = true;
             this.labelEditCategoryMessage.Location = new System.Drawing.Point(289, 88);
             this.labelEditCategoryMessage.Name = "labelEditCategoryMessage";
-            this.labelEditCategoryMessage.Size = new System.Drawing.Size(94, 13);
+            this.labelEditCategoryMessage.Size = new System.Drawing.Size(90, 13);
             this.labelEditCategoryMessage.TabIndex = 10;
-            this.labelEditCategoryMessage.Text = "Category updated!";
+            this.labelEditCategoryMessage.Text = "category updated";
             // 
             // buttonEditCategory
             // 
@@ -423,9 +423,9 @@ namespace Keyworder
             this.labelEditKeywordMessage.AutoSize = true;
             this.labelEditKeywordMessage.Location = new System.Drawing.Point(289, 88);
             this.labelEditKeywordMessage.Name = "labelEditKeywordMessage";
-            this.labelEditKeywordMessage.Size = new System.Drawing.Size(93, 13);
+            this.labelEditKeywordMessage.Size = new System.Drawing.Size(89, 13);
             this.labelEditKeywordMessage.TabIndex = 10;
-            this.labelEditKeywordMessage.Text = "Keyword updated!";
+            this.labelEditKeywordMessage.Text = "keyword updated";
             // 
             // buttonEditKeyword
             // 
@@ -503,9 +503,9 @@ namespace Keyworder
             this.labelDeleteCategoryMessage.AutoSize = true;
             this.labelDeleteCategoryMessage.Location = new System.Drawing.Point(289, 62);
             this.labelDeleteCategoryMessage.Name = "labelDeleteCategoryMessage";
-            this.labelDeleteCategoryMessage.Size = new System.Drawing.Size(90, 13);
+            this.labelDeleteCategoryMessage.Size = new System.Drawing.Size(86, 13);
             this.labelDeleteCategoryMessage.TabIndex = 10;
-            this.labelDeleteCategoryMessage.Text = "Category deleted!";
+            this.labelDeleteCategoryMessage.Text = "category deleted";
             // 
             // buttonDeleteCategory
             // 
@@ -555,9 +555,9 @@ namespace Keyworder
             this.labelDeleteKeywordMessage.AutoSize = true;
             this.labelDeleteKeywordMessage.Location = new System.Drawing.Point(289, 62);
             this.labelDeleteKeywordMessage.Name = "labelDeleteKeywordMessage";
-            this.labelDeleteKeywordMessage.Size = new System.Drawing.Size(89, 13);
+            this.labelDeleteKeywordMessage.Size = new System.Drawing.Size(85, 13);
             this.labelDeleteKeywordMessage.TabIndex = 10;
-            this.labelDeleteKeywordMessage.Text = "Keyword deleted!";
+            this.labelDeleteKeywordMessage.Text = "keyword deleted";
             // 
             // buttonDeleteKeyword
             // 

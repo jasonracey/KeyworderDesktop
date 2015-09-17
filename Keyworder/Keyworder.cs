@@ -64,7 +64,7 @@ namespace Keyworder
 
             ReloadForm();
 
-            labelCreateCategoryMessage.Text = @"Category created!";
+            labelCreateCategoryMessage.Text = @"category created";
             labelCreateCategoryMessage.Visible = true;
         }
 
@@ -94,7 +94,7 @@ namespace Keyworder
 
             ReloadForm();
 
-            labelCreateKeywordMessage.Text = @"Keyword created!";
+            labelCreateKeywordMessage.Text = @"keyword created";
             labelCreateKeywordMessage.Visible = true;
         }
 
@@ -111,7 +111,7 @@ namespace Keyworder
             
             ReloadForm();
 
-            labelDeleteCategoryMessage.Text = @"Category deleted!";
+            labelDeleteCategoryMessage.Text = @"category deleted";
             labelDeleteCategoryMessage.Visible = true;
         }
 
@@ -129,7 +129,7 @@ namespace Keyworder
 
             ReloadForm();
 
-            labelDeleteKeywordMessage.Text = @"Keyword deleted!";
+            labelDeleteKeywordMessage.Text = @"keyword deleted";
             labelDeleteKeywordMessage.Visible = true;
         }
 
@@ -159,7 +159,7 @@ namespace Keyworder
 
             ReloadForm();
 
-            labelEditCategoryMessage.Text = @"Category saved!";
+            labelEditCategoryMessage.Text = @"category saved";
             labelEditCategoryMessage.Visible = true;
         }
 
@@ -189,7 +189,7 @@ namespace Keyworder
 
             ReloadForm();
 
-            labelEditKeywordMessage.Text = @"Keyword saved!";
+            labelEditKeywordMessage.Text = @"keyword saved";
             labelEditKeywordMessage.Visible = true;
         }
 
