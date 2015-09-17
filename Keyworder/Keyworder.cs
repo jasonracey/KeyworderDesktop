@@ -179,7 +179,7 @@ namespace Keyworder
                 return;
             }
 
-            var oldKeyword = (Keyword)((ComboBoxItem)comboBoxDeleteKeyword.SelectedItem).Value;
+            var oldKeyword = (Keyword)((ComboBoxItem)comboBoxEditKeyword.SelectedItem).Value;
             var newKeywordId = textBoxEditKeyword.CleanText();
 
             var textInfo = new CultureInfo("en-US", false).TextInfo;
