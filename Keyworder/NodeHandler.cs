@@ -10,15 +10,7 @@ namespace Keyworder
     {
         public static bool AtLeastOneNodeIsChecked(IEnumerable nodes)
         {
-            foreach (TreeNode node in nodes)
-            {
-                if (node.Checked)
-                {
-                    return true;
-                }
-                return AtLeastOneNodeIsChecked(node.Nodes);
-            }
-            return false;
+            return nodes.Cast<TreeNode>().Any(NodeIsChecked);
         }
 
         private static string GetCategoryText(TreeNode node)
@@ -37,6 +29,11 @@ namespace Keyworder
             return BuildStateList(nodes).ToDictionary(
                 tuple => $"{tuple.Item1},{tuple.Item2}",
                 tuple => new Tuple<bool, bool>(tuple.Item3, tuple.Item4));
+        }
+
+        private static bool NodeIsChecked(TreeNode node)
+        {
+            return node.Checked || node.Nodes.Cast<TreeNode>().Any(NodeIsChecked);
         }
 
         public static void SetState(IEnumerable nodes, Dictionary<string, Tuple<bool, bool>> state)
