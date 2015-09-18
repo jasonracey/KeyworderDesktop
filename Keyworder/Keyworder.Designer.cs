@@ -36,7 +36,8 @@ namespace Keyworder
             this.labelSelectedKeywords = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabSelect = new System.Windows.Forms.TabPage();
-            this.labelKeywordsCopiedToClipboard = new System.Windows.Forms.Label();
+            this.buttonDeleteSelections = new System.Windows.Forms.Button();
+            this.labelSelectKeywordsMessage = new System.Windows.Forms.Label();
             this.listBoxSelectedKeywords = new System.Windows.Forms.ListBox();
             this.buttonClearSelections = new System.Windows.Forms.Button();
             this.tabCreate = new System.Windows.Forms.TabPage();
@@ -52,43 +53,11 @@ namespace Keyworder
             this.comboBoxCategoryOfKeywordToCreate = new System.Windows.Forms.ComboBox();
             this.labelNewKeyword = new System.Windows.Forms.Label();
             this.labelCategoryForNewKeyword = new System.Windows.Forms.Label();
-            this.tabEdit = new System.Windows.Forms.TabPage();
-            this.groupBoxEditCategories = new System.Windows.Forms.GroupBox();
-            this.labelEditCategoryMessage = new System.Windows.Forms.Label();
-            this.buttonEditCategory = new System.Windows.Forms.Button();
-            this.textBoxEditCategory = new System.Windows.Forms.TextBox();
-            this.comboBoxEditCategory = new System.Windows.Forms.ComboBox();
-            this.labelCategoryEdit = new System.Windows.Forms.Label();
-            this.labelCategoryToEdit = new System.Windows.Forms.Label();
-            this.groupBoxEditKeywords = new System.Windows.Forms.GroupBox();
-            this.labelEditKeywordMessage = new System.Windows.Forms.Label();
-            this.buttonEditKeyword = new System.Windows.Forms.Button();
-            this.textBoxEditKeyword = new System.Windows.Forms.TextBox();
-            this.comboBoxEditKeyword = new System.Windows.Forms.ComboBox();
-            this.labelKeywordEdit = new System.Windows.Forms.Label();
-            this.labelKeywordToEdit = new System.Windows.Forms.Label();
-            this.tabDelete = new System.Windows.Forms.TabPage();
-            this.groupBoxDeleteCategories = new System.Windows.Forms.GroupBox();
-            this.labelDeleteCategoryMessage = new System.Windows.Forms.Label();
-            this.buttonDeleteCategory = new System.Windows.Forms.Button();
-            this.comboBoxDeleteCategory = new System.Windows.Forms.ComboBox();
-            this.labelDeleteCategory = new System.Windows.Forms.Label();
-            this.groupBoxDeleteKeywords = new System.Windows.Forms.GroupBox();
-            this.labelDeleteKeywordMessage = new System.Windows.Forms.Label();
-            this.buttonDeleteKeyword = new System.Windows.Forms.Button();
-            this.comboBoxDeleteKeyword = new System.Windows.Forms.ComboBox();
-            this.labelDeleteKeyword = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabSelect.SuspendLayout();
             this.tabCreate.SuspendLayout();
             this.groupBoxCreateCategories.SuspendLayout();
             this.groupBoxCreateKeywords.SuspendLayout();
-            this.tabEdit.SuspendLayout();
-            this.groupBoxEditCategories.SuspendLayout();
-            this.groupBoxEditKeywords.SuspendLayout();
-            this.tabDelete.SuspendLayout();
-            this.groupBoxDeleteCategories.SuspendLayout();
-            this.groupBoxDeleteKeywords.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonCopyToClipboard
@@ -114,10 +83,13 @@ namespace Keyworder
             // 
             this.treeViewSelectKeywords.BackColor = System.Drawing.SystemColors.Window;
             this.treeViewSelectKeywords.CheckBoxes = true;
+            this.treeViewSelectKeywords.HotTracking = true;
+            this.treeViewSelectKeywords.LabelEdit = true;
             this.treeViewSelectKeywords.Location = new System.Drawing.Point(6, 19);
             this.treeViewSelectKeywords.Name = "treeViewSelectKeywords";
             this.treeViewSelectKeywords.Size = new System.Drawing.Size(315, 446);
             this.treeViewSelectKeywords.TabIndex = 4;
+            this.treeViewSelectKeywords.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.treeViewSelectKeywords_AfterLabelEdit);
             this.treeViewSelectKeywords.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeViewSelectKeywords_AfterCheck);
             // 
             // labelSelectedKeywords
@@ -133,8 +105,6 @@ namespace Keyworder
             // 
             this.tabControl.Controls.Add(this.tabSelect);
             this.tabControl.Controls.Add(this.tabCreate);
-            this.tabControl.Controls.Add(this.tabEdit);
-            this.tabControl.Controls.Add(this.tabDelete);
             this.tabControl.HotTrack = true;
             this.tabControl.Location = new System.Drawing.Point(13, 13);
             this.tabControl.Name = "tabControl";
@@ -144,7 +114,8 @@ namespace Keyworder
             // 
             // tabSelect
             // 
-            this.tabSelect.Controls.Add(this.labelKeywordsCopiedToClipboard);
+            this.tabSelect.Controls.Add(this.buttonDeleteSelections);
+            this.tabSelect.Controls.Add(this.labelSelectKeywordsMessage);
             this.tabSelect.Controls.Add(this.listBoxSelectedKeywords);
             this.tabSelect.Controls.Add(this.buttonClearSelections);
             this.tabSelect.Controls.Add(this.labelAllKeywords);
@@ -159,14 +130,24 @@ namespace Keyworder
             this.tabSelect.Text = "Select";
             this.tabSelect.UseVisualStyleBackColor = true;
             // 
-            // labelKeywordsCopiedToClipboard
+            // buttonDeleteSelections
             // 
-            this.labelKeywordsCopiedToClipboard.AutoSize = true;
-            this.labelKeywordsCopiedToClipboard.Location = new System.Drawing.Point(264, 486);
-            this.labelKeywordsCopiedToClipboard.Name = "labelKeywordsCopiedToClipboard";
-            this.labelKeywordsCopiedToClipboard.Size = new System.Drawing.Size(145, 13);
-            this.labelKeywordsCopiedToClipboard.TabIndex = 8;
-            this.labelKeywordsCopiedToClipboard.Text = "keywords copied to clipboard";
+            this.buttonDeleteSelections.Location = new System.Drawing.Point(303, 481);
+            this.buttonDeleteSelections.Name = "buttonDeleteSelections";
+            this.buttonDeleteSelections.Size = new System.Drawing.Size(110, 23);
+            this.buttonDeleteSelections.TabIndex = 9;
+            this.buttonDeleteSelections.Text = "Delete Selections";
+            this.buttonDeleteSelections.UseVisualStyleBackColor = true;
+            this.buttonDeleteSelections.Click += new System.EventHandler(this.buttonDeleteSelections_Click);
+            // 
+            // labelSelectKeywordsMessage
+            // 
+            this.labelSelectKeywordsMessage.Location = new System.Drawing.Point(152, 486);
+            this.labelSelectKeywordsMessage.Name = "labelSelectKeywordsMessage";
+            this.labelSelectKeywordsMessage.Size = new System.Drawing.Size(145, 13);
+            this.labelSelectKeywordsMessage.TabIndex = 8;
+            this.labelSelectKeywordsMessage.Text = "keywords copied to clipboard";
+            this.labelSelectKeywordsMessage.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // listBoxSelectedKeywords
             // 
@@ -207,7 +188,7 @@ namespace Keyworder
             this.groupBoxCreateCategories.Controls.Add(this.buttonCreateCategory);
             this.groupBoxCreateCategories.Controls.Add(this.textBoxCreateCategory);
             this.groupBoxCreateCategories.Controls.Add(this.labelNewCategory);
-            this.groupBoxCreateCategories.Location = new System.Drawing.Point(6, 264);
+            this.groupBoxCreateCategories.Location = new System.Drawing.Point(6, 6);
             this.groupBoxCreateCategories.Name = "groupBoxCreateCategories";
             this.groupBoxCreateCategories.Size = new System.Drawing.Size(639, 240);
             this.groupBoxCreateCategories.TabIndex = 1;
@@ -258,7 +239,7 @@ namespace Keyworder
             this.groupBoxCreateKeywords.Controls.Add(this.comboBoxCategoryOfKeywordToCreate);
             this.groupBoxCreateKeywords.Controls.Add(this.labelNewKeyword);
             this.groupBoxCreateKeywords.Controls.Add(this.labelCategoryForNewKeyword);
-            this.groupBoxCreateKeywords.Location = new System.Drawing.Point(6, 6);
+            this.groupBoxCreateKeywords.Location = new System.Drawing.Point(6, 264);
             this.groupBoxCreateKeywords.Name = "groupBoxCreateKeywords";
             this.groupBoxCreateKeywords.Size = new System.Drawing.Size(639, 240);
             this.groupBoxCreateKeywords.TabIndex = 0;
@@ -321,274 +302,6 @@ namespace Keyworder
             this.labelCategoryForNewKeyword.TabIndex = 0;
             this.labelCategoryForNewKeyword.Text = "Category";
             // 
-            // tabEdit
-            // 
-            this.tabEdit.Controls.Add(this.groupBoxEditCategories);
-            this.tabEdit.Controls.Add(this.groupBoxEditKeywords);
-            this.tabEdit.Location = new System.Drawing.Point(4, 22);
-            this.tabEdit.Name = "tabEdit";
-            this.tabEdit.Size = new System.Drawing.Size(651, 510);
-            this.tabEdit.TabIndex = 2;
-            this.tabEdit.Text = "Edit";
-            this.tabEdit.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxEditCategories
-            // 
-            this.groupBoxEditCategories.Controls.Add(this.labelEditCategoryMessage);
-            this.groupBoxEditCategories.Controls.Add(this.buttonEditCategory);
-            this.groupBoxEditCategories.Controls.Add(this.textBoxEditCategory);
-            this.groupBoxEditCategories.Controls.Add(this.comboBoxEditCategory);
-            this.groupBoxEditCategories.Controls.Add(this.labelCategoryEdit);
-            this.groupBoxEditCategories.Controls.Add(this.labelCategoryToEdit);
-            this.groupBoxEditCategories.Location = new System.Drawing.Point(6, 264);
-            this.groupBoxEditCategories.Name = "groupBoxEditCategories";
-            this.groupBoxEditCategories.Size = new System.Drawing.Size(639, 240);
-            this.groupBoxEditCategories.TabIndex = 2;
-            this.groupBoxEditCategories.TabStop = false;
-            this.groupBoxEditCategories.Text = "Edit Categories";
-            // 
-            // labelEditCategoryMessage
-            // 
-            this.labelEditCategoryMessage.AutoSize = true;
-            this.labelEditCategoryMessage.Location = new System.Drawing.Point(289, 88);
-            this.labelEditCategoryMessage.Name = "labelEditCategoryMessage";
-            this.labelEditCategoryMessage.Size = new System.Drawing.Size(90, 13);
-            this.labelEditCategoryMessage.TabIndex = 10;
-            this.labelEditCategoryMessage.Text = "category updated";
-            // 
-            // buttonEditCategory
-            // 
-            this.buttonEditCategory.Location = new System.Drawing.Point(386, 83);
-            this.buttonEditCategory.Name = "buttonEditCategory";
-            this.buttonEditCategory.Size = new System.Drawing.Size(75, 23);
-            this.buttonEditCategory.TabIndex = 4;
-            this.buttonEditCategory.Text = "Save";
-            this.buttonEditCategory.UseVisualStyleBackColor = true;
-            this.buttonEditCategory.Click += new System.EventHandler(this.buttonEditCategory_Click);
-            // 
-            // textBoxEditCategory
-            // 
-            this.textBoxEditCategory.Location = new System.Drawing.Point(61, 57);
-            this.textBoxEditCategory.Name = "textBoxEditCategory";
-            this.textBoxEditCategory.Size = new System.Drawing.Size(400, 20);
-            this.textBoxEditCategory.TabIndex = 3;
-            this.textBoxEditCategory.TextChanged += new System.EventHandler(this.textBoxEditCategory_TextChanged);
-            // 
-            // comboBoxEditCategory
-            // 
-            this.comboBoxEditCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxEditCategory.FormattingEnabled = true;
-            this.comboBoxEditCategory.Location = new System.Drawing.Point(61, 30);
-            this.comboBoxEditCategory.Name = "comboBoxEditCategory";
-            this.comboBoxEditCategory.Size = new System.Drawing.Size(400, 21);
-            this.comboBoxEditCategory.Sorted = true;
-            this.comboBoxEditCategory.TabIndex = 2;
-            this.comboBoxEditCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxEditCategory_SelectedIndexChanged);
-            // 
-            // labelCategoryEdit
-            // 
-            this.labelCategoryEdit.AutoSize = true;
-            this.labelCategoryEdit.Location = new System.Drawing.Point(30, 57);
-            this.labelCategoryEdit.Name = "labelCategoryEdit";
-            this.labelCategoryEdit.Size = new System.Drawing.Size(25, 13);
-            this.labelCategoryEdit.TabIndex = 1;
-            this.labelCategoryEdit.Text = "Edit";
-            // 
-            // labelCategoryToEdit
-            // 
-            this.labelCategoryToEdit.AutoSize = true;
-            this.labelCategoryToEdit.Location = new System.Drawing.Point(6, 30);
-            this.labelCategoryToEdit.Name = "labelCategoryToEdit";
-            this.labelCategoryToEdit.Size = new System.Drawing.Size(49, 13);
-            this.labelCategoryToEdit.TabIndex = 0;
-            this.labelCategoryToEdit.Text = "Category";
-            // 
-            // groupBoxEditKeywords
-            // 
-            this.groupBoxEditKeywords.Controls.Add(this.labelEditKeywordMessage);
-            this.groupBoxEditKeywords.Controls.Add(this.buttonEditKeyword);
-            this.groupBoxEditKeywords.Controls.Add(this.textBoxEditKeyword);
-            this.groupBoxEditKeywords.Controls.Add(this.comboBoxEditKeyword);
-            this.groupBoxEditKeywords.Controls.Add(this.labelKeywordEdit);
-            this.groupBoxEditKeywords.Controls.Add(this.labelKeywordToEdit);
-            this.groupBoxEditKeywords.Location = new System.Drawing.Point(6, 6);
-            this.groupBoxEditKeywords.Name = "groupBoxEditKeywords";
-            this.groupBoxEditKeywords.Size = new System.Drawing.Size(639, 240);
-            this.groupBoxEditKeywords.TabIndex = 1;
-            this.groupBoxEditKeywords.TabStop = false;
-            this.groupBoxEditKeywords.Text = "Edit Keywords";
-            // 
-            // labelEditKeywordMessage
-            // 
-            this.labelEditKeywordMessage.AutoSize = true;
-            this.labelEditKeywordMessage.Location = new System.Drawing.Point(289, 88);
-            this.labelEditKeywordMessage.Name = "labelEditKeywordMessage";
-            this.labelEditKeywordMessage.Size = new System.Drawing.Size(89, 13);
-            this.labelEditKeywordMessage.TabIndex = 10;
-            this.labelEditKeywordMessage.Text = "keyword updated";
-            // 
-            // buttonEditKeyword
-            // 
-            this.buttonEditKeyword.Location = new System.Drawing.Point(386, 83);
-            this.buttonEditKeyword.Name = "buttonEditKeyword";
-            this.buttonEditKeyword.Size = new System.Drawing.Size(75, 23);
-            this.buttonEditKeyword.TabIndex = 4;
-            this.buttonEditKeyword.Text = "Save";
-            this.buttonEditKeyword.UseVisualStyleBackColor = true;
-            this.buttonEditKeyword.Click += new System.EventHandler(this.buttonEditKeyword_Click);
-            // 
-            // textBoxEditKeyword
-            // 
-            this.textBoxEditKeyword.Location = new System.Drawing.Point(61, 57);
-            this.textBoxEditKeyword.Name = "textBoxEditKeyword";
-            this.textBoxEditKeyword.Size = new System.Drawing.Size(400, 20);
-            this.textBoxEditKeyword.TabIndex = 3;
-            this.textBoxEditKeyword.TextChanged += new System.EventHandler(this.textBoxEditKeyword_TextChanged);
-            // 
-            // comboBoxEditKeyword
-            // 
-            this.comboBoxEditKeyword.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxEditKeyword.FormattingEnabled = true;
-            this.comboBoxEditKeyword.Location = new System.Drawing.Point(61, 30);
-            this.comboBoxEditKeyword.Name = "comboBoxEditKeyword";
-            this.comboBoxEditKeyword.Size = new System.Drawing.Size(400, 21);
-            this.comboBoxEditKeyword.Sorted = true;
-            this.comboBoxEditKeyword.TabIndex = 2;
-            this.comboBoxEditKeyword.SelectedIndexChanged += new System.EventHandler(this.comboBoxEditKeyword_SelectedIndexChanged);
-            // 
-            // labelKeywordEdit
-            // 
-            this.labelKeywordEdit.AutoSize = true;
-            this.labelKeywordEdit.Location = new System.Drawing.Point(30, 57);
-            this.labelKeywordEdit.Name = "labelKeywordEdit";
-            this.labelKeywordEdit.Size = new System.Drawing.Size(25, 13);
-            this.labelKeywordEdit.TabIndex = 1;
-            this.labelKeywordEdit.Text = "Edit";
-            // 
-            // labelKeywordToEdit
-            // 
-            this.labelKeywordToEdit.AutoSize = true;
-            this.labelKeywordToEdit.Location = new System.Drawing.Point(7, 30);
-            this.labelKeywordToEdit.Name = "labelKeywordToEdit";
-            this.labelKeywordToEdit.Size = new System.Drawing.Size(48, 13);
-            this.labelKeywordToEdit.TabIndex = 0;
-            this.labelKeywordToEdit.Text = "Keyword";
-            // 
-            // tabDelete
-            // 
-            this.tabDelete.Controls.Add(this.groupBoxDeleteCategories);
-            this.tabDelete.Controls.Add(this.groupBoxDeleteKeywords);
-            this.tabDelete.Location = new System.Drawing.Point(4, 22);
-            this.tabDelete.Name = "tabDelete";
-            this.tabDelete.Size = new System.Drawing.Size(651, 510);
-            this.tabDelete.TabIndex = 3;
-            this.tabDelete.Text = "Delete";
-            this.tabDelete.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxDeleteCategories
-            // 
-            this.groupBoxDeleteCategories.Controls.Add(this.labelDeleteCategoryMessage);
-            this.groupBoxDeleteCategories.Controls.Add(this.buttonDeleteCategory);
-            this.groupBoxDeleteCategories.Controls.Add(this.comboBoxDeleteCategory);
-            this.groupBoxDeleteCategories.Controls.Add(this.labelDeleteCategory);
-            this.groupBoxDeleteCategories.Location = new System.Drawing.Point(6, 264);
-            this.groupBoxDeleteCategories.Name = "groupBoxDeleteCategories";
-            this.groupBoxDeleteCategories.Size = new System.Drawing.Size(639, 240);
-            this.groupBoxDeleteCategories.TabIndex = 3;
-            this.groupBoxDeleteCategories.TabStop = false;
-            this.groupBoxDeleteCategories.Text = "Delete Categories";
-            // 
-            // labelDeleteCategoryMessage
-            // 
-            this.labelDeleteCategoryMessage.AutoSize = true;
-            this.labelDeleteCategoryMessage.Location = new System.Drawing.Point(289, 62);
-            this.labelDeleteCategoryMessage.Name = "labelDeleteCategoryMessage";
-            this.labelDeleteCategoryMessage.Size = new System.Drawing.Size(86, 13);
-            this.labelDeleteCategoryMessage.TabIndex = 10;
-            this.labelDeleteCategoryMessage.Text = "category deleted";
-            // 
-            // buttonDeleteCategory
-            // 
-            this.buttonDeleteCategory.Location = new System.Drawing.Point(386, 57);
-            this.buttonDeleteCategory.Name = "buttonDeleteCategory";
-            this.buttonDeleteCategory.Size = new System.Drawing.Size(75, 23);
-            this.buttonDeleteCategory.TabIndex = 4;
-            this.buttonDeleteCategory.Text = "Delete";
-            this.buttonDeleteCategory.UseVisualStyleBackColor = true;
-            this.buttonDeleteCategory.Click += new System.EventHandler(this.buttonDeleteCategory_Click);
-            // 
-            // comboBoxDeleteCategory
-            // 
-            this.comboBoxDeleteCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxDeleteCategory.FormattingEnabled = true;
-            this.comboBoxDeleteCategory.Location = new System.Drawing.Point(61, 30);
-            this.comboBoxDeleteCategory.Name = "comboBoxDeleteCategory";
-            this.comboBoxDeleteCategory.Size = new System.Drawing.Size(400, 21);
-            this.comboBoxDeleteCategory.Sorted = true;
-            this.comboBoxDeleteCategory.TabIndex = 2;
-            this.comboBoxDeleteCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxDeleteCategory_SelectedIndexChanged);
-            // 
-            // labelDeleteCategory
-            // 
-            this.labelDeleteCategory.AutoSize = true;
-            this.labelDeleteCategory.Location = new System.Drawing.Point(7, 30);
-            this.labelDeleteCategory.Name = "labelDeleteCategory";
-            this.labelDeleteCategory.Size = new System.Drawing.Size(49, 13);
-            this.labelDeleteCategory.TabIndex = 0;
-            this.labelDeleteCategory.Text = "Category";
-            // 
-            // groupBoxDeleteKeywords
-            // 
-            this.groupBoxDeleteKeywords.Controls.Add(this.labelDeleteKeywordMessage);
-            this.groupBoxDeleteKeywords.Controls.Add(this.buttonDeleteKeyword);
-            this.groupBoxDeleteKeywords.Controls.Add(this.comboBoxDeleteKeyword);
-            this.groupBoxDeleteKeywords.Controls.Add(this.labelDeleteKeyword);
-            this.groupBoxDeleteKeywords.Location = new System.Drawing.Point(6, 6);
-            this.groupBoxDeleteKeywords.Name = "groupBoxDeleteKeywords";
-            this.groupBoxDeleteKeywords.Size = new System.Drawing.Size(639, 240);
-            this.groupBoxDeleteKeywords.TabIndex = 2;
-            this.groupBoxDeleteKeywords.TabStop = false;
-            this.groupBoxDeleteKeywords.Text = "Delete Keywords";
-            // 
-            // labelDeleteKeywordMessage
-            // 
-            this.labelDeleteKeywordMessage.AutoSize = true;
-            this.labelDeleteKeywordMessage.Location = new System.Drawing.Point(289, 62);
-            this.labelDeleteKeywordMessage.Name = "labelDeleteKeywordMessage";
-            this.labelDeleteKeywordMessage.Size = new System.Drawing.Size(85, 13);
-            this.labelDeleteKeywordMessage.TabIndex = 10;
-            this.labelDeleteKeywordMessage.Text = "keyword deleted";
-            // 
-            // buttonDeleteKeyword
-            // 
-            this.buttonDeleteKeyword.Location = new System.Drawing.Point(386, 57);
-            this.buttonDeleteKeyword.Name = "buttonDeleteKeyword";
-            this.buttonDeleteKeyword.Size = new System.Drawing.Size(75, 23);
-            this.buttonDeleteKeyword.TabIndex = 4;
-            this.buttonDeleteKeyword.Text = "Delete";
-            this.buttonDeleteKeyword.UseVisualStyleBackColor = true;
-            this.buttonDeleteKeyword.Click += new System.EventHandler(this.buttonDeleteKeyword_Click);
-            // 
-            // comboBoxDeleteKeyword
-            // 
-            this.comboBoxDeleteKeyword.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxDeleteKeyword.FormattingEnabled = true;
-            this.comboBoxDeleteKeyword.Location = new System.Drawing.Point(61, 30);
-            this.comboBoxDeleteKeyword.Name = "comboBoxDeleteKeyword";
-            this.comboBoxDeleteKeyword.Size = new System.Drawing.Size(400, 21);
-            this.comboBoxDeleteKeyword.Sorted = true;
-            this.comboBoxDeleteKeyword.TabIndex = 2;
-            this.comboBoxDeleteKeyword.SelectedIndexChanged += new System.EventHandler(this.comboBoxDeleteKeyword_SelectedIndexChanged);
-            // 
-            // labelDeleteKeyword
-            // 
-            this.labelDeleteKeyword.AutoSize = true;
-            this.labelDeleteKeyword.Location = new System.Drawing.Point(7, 30);
-            this.labelDeleteKeyword.Name = "labelDeleteKeyword";
-            this.labelDeleteKeyword.Size = new System.Drawing.Size(48, 13);
-            this.labelDeleteKeyword.TabIndex = 0;
-            this.labelDeleteKeyword.Text = "Keyword";
-            // 
             // Keyworder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -607,16 +320,6 @@ namespace Keyworder
             this.groupBoxCreateCategories.PerformLayout();
             this.groupBoxCreateKeywords.ResumeLayout(false);
             this.groupBoxCreateKeywords.PerformLayout();
-            this.tabEdit.ResumeLayout(false);
-            this.groupBoxEditCategories.ResumeLayout(false);
-            this.groupBoxEditCategories.PerformLayout();
-            this.groupBoxEditKeywords.ResumeLayout(false);
-            this.groupBoxEditKeywords.PerformLayout();
-            this.tabDelete.ResumeLayout(false);
-            this.groupBoxDeleteCategories.ResumeLayout(false);
-            this.groupBoxDeleteCategories.PerformLayout();
-            this.groupBoxDeleteKeywords.ResumeLayout(false);
-            this.groupBoxDeleteKeywords.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -629,8 +332,6 @@ namespace Keyworder
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabSelect;
         private System.Windows.Forms.TabPage tabCreate;
-        private System.Windows.Forms.TabPage tabEdit;
-        private System.Windows.Forms.TabPage tabDelete;
         private System.Windows.Forms.Button buttonClearSelections;
         private System.Windows.Forms.ListBox listBoxSelectedKeywords;
         private SingleClickTreeView treeViewSelectKeywords;
@@ -644,33 +345,10 @@ namespace Keyworder
         private System.Windows.Forms.ComboBox comboBoxCategoryOfKeywordToCreate;
         private System.Windows.Forms.Label labelNewKeyword;
         private System.Windows.Forms.Label labelCategoryForNewKeyword;
-        private System.Windows.Forms.Label labelKeywordsCopiedToClipboard;
+        private System.Windows.Forms.Label labelSelectKeywordsMessage;
         private System.Windows.Forms.Label labelCreateCategoryMessage;
         private System.Windows.Forms.Label labelCreateKeywordMessage;
-        private System.Windows.Forms.GroupBox groupBoxEditCategories;
-        private System.Windows.Forms.Label labelEditCategoryMessage;
-        private System.Windows.Forms.Button buttonEditCategory;
-        private System.Windows.Forms.TextBox textBoxEditCategory;
-        private System.Windows.Forms.ComboBox comboBoxEditCategory;
-        private System.Windows.Forms.Label labelCategoryEdit;
-        private System.Windows.Forms.Label labelCategoryToEdit;
-        private System.Windows.Forms.GroupBox groupBoxEditKeywords;
-        private System.Windows.Forms.Label labelEditKeywordMessage;
-        private System.Windows.Forms.Button buttonEditKeyword;
-        private System.Windows.Forms.TextBox textBoxEditKeyword;
-        private System.Windows.Forms.ComboBox comboBoxEditKeyword;
-        private System.Windows.Forms.Label labelKeywordEdit;
-        private System.Windows.Forms.Label labelKeywordToEdit;
-        private System.Windows.Forms.GroupBox groupBoxDeleteCategories;
-        private System.Windows.Forms.Label labelDeleteCategoryMessage;
-        private System.Windows.Forms.Button buttonDeleteCategory;
-        private System.Windows.Forms.ComboBox comboBoxDeleteCategory;
-        private System.Windows.Forms.Label labelDeleteCategory;
-        private System.Windows.Forms.GroupBox groupBoxDeleteKeywords;
-        private System.Windows.Forms.Label labelDeleteKeywordMessage;
-        private System.Windows.Forms.Button buttonDeleteKeyword;
-        private System.Windows.Forms.ComboBox comboBoxDeleteKeyword;
-        private System.Windows.Forms.Label labelDeleteKeyword;
+        private System.Windows.Forms.Button buttonDeleteSelections;
     }
 }
 

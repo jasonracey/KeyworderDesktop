@@ -13,14 +13,9 @@ namespace Keyworder
             return nodes.Cast<TreeNode>().Any(NodeIsChecked);
         }
 
-        private static string GetCategoryText(TreeNode node)
+        public static IEnumerable GetCheckedNodes(IEnumerable nodes)
         {
-            return node.Nodes.Count > 0 ? node.Text : node.Parent.Text;
-        }
-
-        private static string GetKeywordText(TreeNode node)
-        {
-            return node.Nodes.Count == 0 ? node.Text : string.Empty;
+            return nodes.Cast<TreeNode>().Where(NodeIsChecked);
         }
 
         public static Dictionary<string, Tuple<bool, bool>> GetState(IEnumerable nodes)
@@ -29,11 +24,6 @@ namespace Keyworder
             return BuildStateList(nodes).ToDictionary(
                 tuple => $"{tuple.Item1},{tuple.Item2}",
                 tuple => new Tuple<bool, bool>(tuple.Item3, tuple.Item4));
-        }
-
-        private static bool NodeIsChecked(TreeNode node)
-        {
-            return node.Checked || node.Nodes.Cast<TreeNode>().Any(NodeIsChecked);
         }
 
         public static void SetState(IEnumerable nodes, Dictionary<string, Tuple<bool, bool>> state)
@@ -60,6 +50,21 @@ namespace Keyworder
                 node.Checked = nodeChecked;
                 UpdateChildNodes(node, nodeChecked);
             }
+        }
+
+        private static string GetCategoryText(TreeNode node)
+        {
+            return node.Nodes.Count > 0 ? node.Text : node.Parent.Text;
+        }
+
+        private static string GetKeywordText(TreeNode node)
+        {
+            return node.Nodes.Count == 0 ? node.Text : string.Empty;
+        }
+
+        private static bool NodeIsChecked(TreeNode node)
+        {
+            return node.Checked || node.Nodes.Cast<TreeNode>().Any(NodeIsChecked);
         }
 
         private static IEnumerable<Tuple<string, string, bool, bool>> BuildStateList(IEnumerable nodes)
