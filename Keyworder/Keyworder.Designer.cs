@@ -32,7 +32,7 @@ namespace Keyworder
         {
             this.buttonCopyToClipboard = new System.Windows.Forms.Button();
             this.labelAllKeywords = new System.Windows.Forms.Label();
-            this.treeViewAllKeywords = new KeyworderControls.SingleClickTreeView();
+            this.treeViewSelectKeywords = new KeyworderControls.SingleClickTreeView();
             this.labelSelectedKeywords = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabSelect = new System.Windows.Forms.TabPage();
@@ -110,15 +110,15 @@ namespace Keyworder
             this.labelAllKeywords.TabIndex = 2;
             this.labelAllKeywords.Text = "All Keywords";
             // 
-            // treeViewAllKeywords
+            // treeViewSelectKeywords
             // 
-            this.treeViewAllKeywords.BackColor = System.Drawing.SystemColors.Window;
-            this.treeViewAllKeywords.CheckBoxes = true;
-            this.treeViewAllKeywords.Location = new System.Drawing.Point(6, 19);
-            this.treeViewAllKeywords.Name = "treeViewAllKeywords";
-            this.treeViewAllKeywords.Size = new System.Drawing.Size(315, 446);
-            this.treeViewAllKeywords.TabIndex = 4;
-            this.treeViewAllKeywords.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeViewAllKeywords_AfterCheck);
+            this.treeViewSelectKeywords.BackColor = System.Drawing.SystemColors.Window;
+            this.treeViewSelectKeywords.CheckBoxes = true;
+            this.treeViewSelectKeywords.Location = new System.Drawing.Point(6, 19);
+            this.treeViewSelectKeywords.Name = "treeViewSelectKeywords";
+            this.treeViewSelectKeywords.Size = new System.Drawing.Size(315, 446);
+            this.treeViewSelectKeywords.TabIndex = 4;
+            this.treeViewSelectKeywords.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treeViewSelectKeywords_AfterCheck);
             // 
             // labelSelectedKeywords
             // 
@@ -150,7 +150,7 @@ namespace Keyworder
             this.tabSelect.Controls.Add(this.labelAllKeywords);
             this.tabSelect.Controls.Add(this.buttonCopyToClipboard);
             this.tabSelect.Controls.Add(this.labelSelectedKeywords);
-            this.tabSelect.Controls.Add(this.treeViewAllKeywords);
+            this.tabSelect.Controls.Add(this.treeViewSelectKeywords);
             this.tabSelect.Location = new System.Drawing.Point(4, 22);
             this.tabSelect.Name = "tabSelect";
             this.tabSelect.Padding = new System.Windows.Forms.Padding(3);
@@ -633,7 +633,7 @@ namespace Keyworder
         private System.Windows.Forms.TabPage tabDelete;
         private System.Windows.Forms.Button buttonClearSelections;
         private System.Windows.Forms.ListBox listBoxSelectedKeywords;
-        private SingleClickTreeView treeViewAllKeywords;
+        private SingleClickTreeView treeViewSelectKeywords;
         private System.Windows.Forms.GroupBox groupBoxCreateCategories;
         private System.Windows.Forms.GroupBox groupBoxCreateKeywords;
         private System.Windows.Forms.Button buttonCreateCategory;

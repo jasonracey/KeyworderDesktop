@@ -244,7 +244,7 @@ namespace Keyworder
             SetEditTabButtonState();
         }
 
-        private void treeViewAllKeywords_AfterCheck(object sender, TreeViewEventArgs e)
+        private void treeViewSelectKeywords_AfterCheck(object sender, TreeViewEventArgs e)
         {
             // return when this event is triggered by code rather than user input
             if (e.Action == TreeViewAction.Unknown)
@@ -252,7 +252,7 @@ namespace Keyworder
                 return;
             }
             NodeHandler.UpdateChildNodes(e.Node, e.Node.Checked);
-            PopulateListBoxSelectedItems(treeViewAllKeywords.Nodes);
+            PopulateListBoxSelectedItems(treeViewSelectKeywords.Nodes);
             SetSelectTabButtonState();
             labelKeywordsCopiedToClipboard.Visible = false;
         }
@@ -354,8 +354,8 @@ namespace Keyworder
 
         private void PopulateTreeViewAllKeywords(IEnumerable<Category> categories)
         {
-            treeViewAllKeywords.BeginUpdate();
-            treeViewAllKeywords.Nodes.Clear();
+            treeViewSelectKeywords.BeginUpdate();
+            treeViewSelectKeywords.Nodes.Clear();
             foreach (var category in categories)
             {
                 // if user created a category but hasn't assigned any keywords to it yet
@@ -368,17 +368,17 @@ namespace Keyworder
                 {
                     categoryNode.Nodes.Add(keyword.KeywordId);
                 }
-                treeViewAllKeywords.Nodes.Add(categoryNode);
+                treeViewSelectKeywords.Nodes.Add(categoryNode);
             }
-            treeViewAllKeywords.EndUpdate();
+            treeViewSelectKeywords.EndUpdate();
         }
 
         private void RefreshSelectTab(SortedSet<Category> categories)
         {
-            var state = NodeHandler.GetState(treeViewAllKeywords.Nodes);
+            var state = NodeHandler.GetState(treeViewSelectKeywords.Nodes);
             PopulateTreeViewAllKeywords(categories);
-            NodeHandler.SetState(treeViewAllKeywords.Nodes, state);
-            PopulateListBoxSelectedItems(treeViewAllKeywords.Nodes);
+            NodeHandler.SetState(treeViewSelectKeywords.Nodes, state);
+            PopulateListBoxSelectedItems(treeViewSelectKeywords.Nodes);
         }
 
         private void ReloadForm()
@@ -410,7 +410,7 @@ namespace Keyworder
 
         private void SetSelectTabButtonState()
         {
-            var shouldEnable = NodeHandler.AtLeastOneNodeIsChecked(treeViewAllKeywords.Nodes);
+            var shouldEnable = NodeHandler.AtLeastOneNodeIsChecked(treeViewSelectKeywords.Nodes);
             buttonClearSelections.Enabled = shouldEnable;
             buttonCopyToClipboard.Enabled = shouldEnable;
         }
