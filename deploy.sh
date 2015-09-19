@@ -1,0 +1,2 @@
+/c/Windows/Microsoft.NET/Framework/v4.0.30319/MSBuild.exe ./Keyworder.sln /property:Configuration=Release
+find ./Keyworder/bin/Release -name '*.exe' -o -name '*.config' -o -name '*.dll' | xargs cp -v -t /y/Files/Software/Tools/Keyworder/
