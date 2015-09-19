@@ -83,7 +83,6 @@ namespace Keyworder
             // 
             this.treeViewSelectKeywords.BackColor = System.Drawing.SystemColors.Window;
             this.treeViewSelectKeywords.CheckBoxes = true;
-            this.treeViewSelectKeywords.HotTracking = true;
             this.treeViewSelectKeywords.LabelEdit = true;
             this.treeViewSelectKeywords.Location = new System.Drawing.Point(6, 19);
             this.treeViewSelectKeywords.Name = "treeViewSelectKeywords";
