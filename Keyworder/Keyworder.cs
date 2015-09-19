@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using KeyworderLib;
@@ -89,10 +90,15 @@ namespace Keyworder
 
             KeywordRepository.CreateKeyword(category, keyword);
 
+            // retain selected category and keep focus here
             var selectedIndex = comboBoxCategoryOfKeywordToCreate.SelectedIndex;
             ReloadForm();
             comboBoxCategoryOfKeywordToCreate.SelectedIndex = selectedIndex;
             textBoxCreateKeyword.Focus();
+
+            // put corresponding area of tree in viewport (refresh otherwise scrolls view to the bottom of the tree)
+            treeViewSelectKeywords.TopNode = NodeHandler.GetCategoryNode(treeViewSelectKeywords.Nodes, category);
+            treeViewSelectKeywords.TopNode.Expand();
 
             labelCreateKeywordMessage.Text = @"keyword created";
             labelCreateKeywordMessage.Visible = true;

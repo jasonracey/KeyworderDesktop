@@ -13,6 +13,19 @@ namespace Keyworder
             return nodes.Cast<TreeNode>().Any(AnyNodeIsChecked);
         }
 
+        public static TreeNode GetCategoryNode(IEnumerable nodes, string category)
+        {
+            // don't need to recurse because category nodes are all root depth
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Text == category)
+                {
+                    return node;
+                }
+            }
+            throw new ArgumentException("node not found");
+        }
+
         public static IEnumerable<TreeNode> GetCheckedNodes(IEnumerable nodes)
         {
             var checkedNodes = new List<TreeNode>();
