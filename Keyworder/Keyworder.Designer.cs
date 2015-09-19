@@ -209,7 +209,7 @@ namespace Keyworder
             this.buttonCreateCategory.Name = "buttonCreateCategory";
             this.buttonCreateCategory.Size = new System.Drawing.Size(75, 23);
             this.buttonCreateCategory.TabIndex = 7;
-            this.buttonCreateCategory.Text = "Save";
+            this.buttonCreateCategory.Text = "Create";
             this.buttonCreateCategory.UseVisualStyleBackColor = true;
             this.buttonCreateCategory.Click += new System.EventHandler(this.buttonCreateCategory_Click);
             // 
@@ -260,7 +260,7 @@ namespace Keyworder
             this.buttonCreateKeyword.Name = "buttonCreateKeyword";
             this.buttonCreateKeyword.Size = new System.Drawing.Size(75, 23);
             this.buttonCreateKeyword.TabIndex = 4;
-            this.buttonCreateKeyword.Text = "Save";
+            this.buttonCreateKeyword.Text = "Create";
             this.buttonCreateKeyword.UseVisualStyleBackColor = true;
             this.buttonCreateKeyword.Click += new System.EventHandler(this.buttonCreateKeyword_Click);
             // 
