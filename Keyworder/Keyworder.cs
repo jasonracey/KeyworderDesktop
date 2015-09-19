@@ -106,6 +106,18 @@ namespace Keyworder
 
         private void buttonDeleteSelections_Click(object sender, EventArgs e)
         {
+            var dialogResult = MessageBox.Show(
+                @"Delete selected categories and keywords?", 
+                @"Confirm Delete", 
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Question,
+                MessageBoxDefaultButton.Button2);
+
+            if (dialogResult == DialogResult.Cancel)
+            {
+                return;
+            }
+
             var checkedNodes = NodeHandler.GetCheckedNodes(treeViewSelectKeywords.Nodes);
             foreach (var node in checkedNodes)
             {
