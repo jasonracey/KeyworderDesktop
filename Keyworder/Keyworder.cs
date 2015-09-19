@@ -98,7 +98,7 @@ namespace Keyworder
         private void buttonDeleteSelections_Click(object sender, EventArgs e)
         {
             var checkedNodes = NodeHandler.GetCheckedNodes(treeViewSelectKeywords.Nodes);
-            foreach (TreeNode node in checkedNodes)
+            foreach (var node in checkedNodes)
             {
                 if (node.Parent == null)
                 {

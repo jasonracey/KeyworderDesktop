@@ -10,12 +10,22 @@ namespace Keyworder
     {
         public static bool AtLeastOneNodeIsChecked(IEnumerable nodes)
         {
-            return nodes.Cast<TreeNode>().Any(NodeIsChecked);
+            return nodes.Cast<TreeNode>().Any(AnyNodeIsChecked);
         }
 
-        public static IEnumerable GetCheckedNodes(IEnumerable nodes)
+        public static IEnumerable<TreeNode> GetCheckedNodes(IEnumerable nodes)
         {
-            return nodes.Cast<TreeNode>().Where(NodeIsChecked);
+            var checkedNodes = new List<TreeNode>();
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Checked)
+                {
+                    checkedNodes.Add(node);
+                }
+
+                checkedNodes.AddRange(GetCheckedNodes(node.Nodes));
+            }
+            return checkedNodes;
         }
 
         public static Dictionary<string, Tuple<bool, bool>> GetState(IEnumerable nodes)
@@ -62,9 +72,9 @@ namespace Keyworder
             return node.Nodes.Count == 0 ? node.Text : string.Empty;
         }
 
-        private static bool NodeIsChecked(TreeNode node)
+        private static bool AnyNodeIsChecked(TreeNode node)
         {
-            return node.Checked || node.Nodes.Cast<TreeNode>().Any(NodeIsChecked);
+            return node.Checked || node.Nodes.Cast<TreeNode>().Any(AnyNodeIsChecked);
         }
 
         private static IEnumerable<Tuple<string, string, bool, bool>> BuildStateList(IEnumerable nodes)
