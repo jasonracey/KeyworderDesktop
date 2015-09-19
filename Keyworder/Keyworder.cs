@@ -89,7 +89,10 @@ namespace Keyworder
 
             KeywordRepository.CreateKeyword(category, keyword);
 
+            var selectedIndex = comboBoxCategoryOfKeywordToCreate.SelectedIndex;
             ReloadForm();
+            comboBoxCategoryOfKeywordToCreate.SelectedIndex = selectedIndex;
+            textBoxCreateKeyword.Focus();
 
             labelCreateKeywordMessage.Text = @"keyword created";
             labelCreateKeywordMessage.Visible = true;
