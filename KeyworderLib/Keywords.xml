@@ -6,7 +6,6 @@
     <Keyword KeywordId="Black-Tailed Deer" />
     <Keyword KeywordId="Deer" />
     <Keyword KeywordId="Hoary Marmot" />
-    <Keyword KeywordId="Mammal" />
     <Keyword KeywordId="Marmot" />
     <Keyword KeywordId="Ptarmigan" />
     <Keyword KeywordId="White-Tailed Ptarmigan" />
@@ -35,22 +34,19 @@
     <Keyword KeywordId="Green" />
     <Keyword KeywordId="Purple" />
     <Keyword KeywordId="Brown" />
+    <Keyword KeywordId="White" />
   </Category>
   <Category CategoryId="Land">
     <Keyword KeywordId="Cairn" />
     <Keyword KeywordId="Canyon" />
     <Keyword KeywordId="Cirque" />
-    <Keyword KeywordId="Cliff" />
-    <Keyword KeywordId="Crag" />
     <Keyword KeywordId="Desert" />
     <Keyword KeywordId="Lookout" />
     <Keyword KeywordId="Mountain" />
-    <Keyword KeywordId="Mountain Peak" />
-    <Keyword KeywordId="Ridge" />
-    <Keyword KeywordId="Rock Formation" />
     <Keyword KeywordId="Rocks" />
     <Keyword KeywordId="Stratovolcano" />
     <Keyword KeywordId="Volcano" />
+    <Keyword KeywordId="Sea Stack" />
   </Category>
   <Category CategoryId="Location-General">
     <Keyword KeywordId="Boulder River Wilderness" />
@@ -70,6 +66,8 @@
     <Keyword KeywordId="Washington" />
     <Keyword KeywordId="Zion National Park" />
     <Keyword KeywordId="Wild Sky Wilderness" />
+    <Keyword KeywordId="Glacier Peak Wilderness" />
+    <Keyword KeywordId="Alpine Lakes Wilderness" />
   </Category>
   <Category CategoryId="Location-Specific">
     <Keyword KeywordId="AltaMountain" />
@@ -93,7 +91,7 @@
     <Keyword KeywordId="Grinnell Point" />
     <Keyword KeywordId="Hannegan Peak" />
     <Keyword KeywordId="Heliotrope Ridge" />
-    <Keyword KeywordId="Hidden Lake Peaks North" />
+    <Keyword KeywordId="Hidden Lake Peaks" />
     <Keyword KeywordId="Huckleberry Mountain" />
     <Keyword KeywordId="Humes Ranch" />
     <Keyword KeywordId="Iceberg Lake" />
@@ -128,27 +126,42 @@
     <Keyword KeywordId="Table Mountain" />
     <Keyword KeywordId="Tower Mountain" />
     <Keyword KeywordId="Virgin River" />
+    <Keyword KeywordId="Zion Canyon Narrows" />
+    <Keyword KeywordId="Pacific Ocean" />
+    <Keyword KeywordId="Dragontail Peak" />
+    <Keyword KeywordId="Colchuck Peak" />
+    <Keyword KeywordId="Mount Wilbur" />
+    <Keyword KeywordId="Mount Formidable" />
+    <Keyword KeywordId="Gem Lake" />
+    <Keyword KeywordId="Kaleetan Peak" />
   </Category>
   <Category CategoryId="Plant-Common">
     <Keyword KeywordId="Cottonwood" />
-    <Keyword KeywordId="Field" />
     <Keyword KeywordId="Flower" />
     <Keyword KeywordId="Forest" />
     <Keyword KeywordId="Fremont Cottonwood" />
     <Keyword KeywordId="Heather" />
     <Keyword KeywordId="Lupine" />
     <Keyword KeywordId="Meadow" />
-    <Keyword KeywordId="Plant" />
     <Keyword KeywordId="Sitka Valerian" />
     <Keyword KeywordId="Small-Flowered Paintbrush" />
     <Keyword KeywordId="Subalpine Larch" />
     <Keyword KeywordId="Tree" />
     <Keyword KeywordId="Wildflower" />
+    <Keyword KeywordId="Lewis' Monkeyflower" />
+    <Keyword KeywordId="Great Purple Monkeyflower" />
+    <Keyword KeywordId="Seep-Spring Arnica" />
+    <Keyword KeywordId="Log" />
+    <Keyword KeywordId="Pink Mountain-Heather" />
   </Category>
   <Category CategoryId="Plant-Latin">
     <Keyword KeywordId="Castilleja Parviflora" />
     <Keyword KeywordId="Larix Lyallii" />
     <Keyword KeywordId="Valeriana Sitchensis" />
+    <Keyword KeywordId="Mimulus Lewisii" />
+    <Keyword KeywordId="Arnica Longifolia" />
+    <Keyword KeywordId="Populus Fremontii" />
+    <Keyword KeywordId="Phyllodoce Empetriformis" />
   </Category>
   <Category CategoryId="Sky">
     <Keyword KeywordId="Clouds" />
@@ -166,11 +179,9 @@
   <Category CategoryId="Style">
     <Keyword KeywordId="Black And White" />
     <Keyword KeywordId="Bokeh" />
-    <Keyword KeywordId="Depth Of Field" />
     <Keyword KeywordId="Landscape" />
     <Keyword KeywordId="Monochrome" />
     <Keyword KeywordId="Outdoor" />
-    <Keyword KeywordId="Serene" />
   </Category>
   <Category CategoryId="Tools">
     <Keyword KeywordId="Bower 24mm F/1.4 ED AS UMC" />
@@ -193,6 +204,7 @@
     <Keyword KeywordId="Stream" />
     <Keyword KeywordId="Tarn" />
     <Keyword KeywordId="Waterfall" />
-    <Keyword KeywordId="Water" />
+    <Keyword KeywordId="Ocean" />
+    <Keyword KeywordId="Ice" />
   </Category>
 </Categories>
