@@ -173,18 +173,22 @@ namespace Keyworder
                 return;
             }
 
+            var oldText = e.Node.Text;
+
             var textInfo = new CultureInfo("en-US", false).TextInfo;
             var newText = textInfo.ToTitleCase(e.Label);
 
+            e.Node.Text = newText;
+
             if (e.Node.Parent == null)
             {
-                KeywordRepository.UpdateCategory(e.Node.Text, newText);
+                KeywordRepository.UpdateCategory(oldText, newText);
                 var categories = KeywordRepository.GetCategories();
                 InitCreateTab(categories);
             }
             else
             {
-                KeywordRepository.UpdateKeyword(e.Node.Parent.Text, e.Node.Text, newText);
+                KeywordRepository.UpdateKeyword(e.Node.Parent.Text, oldText, newText);
                 PopulateListBoxSelectedItems(treeViewSelectKeywords.Nodes);
             }
         }
