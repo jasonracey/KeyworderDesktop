@@ -30,13 +30,12 @@ namespace KeyworderLibTest
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ExceptionThrownWhenCategoryDoesntExist()
         {
             const string oldCategoryId = "Foo";
             const string newCategoryId = "Bar";
             KeywordRepository.GetCategories().Count(c => c.CategoryId == oldCategoryId).Should().Be(0);
-            KeywordRepository.UpdateCategory(oldCategoryId, newCategoryId);
+            Assert.That(() => KeywordRepository.UpdateCategory(oldCategoryId, newCategoryId), Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
@@ -60,14 +59,13 @@ namespace KeyworderLibTest
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ExceptionThrownWhenKeywordDoesntExist()
         {
             const string oldKeywordId = "Foo";
             const string newKeywordId = "Bar";
             var cateogry = KeywordRepository.GetCategories().First();
             cateogry.Keywords.Count(k => k.KeywordId == oldKeywordId).Should().Be(0);
-            KeywordRepository.UpdateKeyword(cateogry.CategoryId, oldKeywordId, newKeywordId);
+            Assert.That(() => KeywordRepository.UpdateKeyword(cateogry.CategoryId, oldKeywordId, newKeywordId), Throws.TypeOf<ArgumentException>());
         }
     }
 }
