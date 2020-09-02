@@ -1,55 +1,81 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using FluentAssertions;
 using KeyworderLib;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KeyworderLibTest
 {
-    [TestFixture]
+    [TestClass]
     public class WhenUpdatingKeywords
     {
-        [SetUp]
-        public void SetUp()
+        private string _path;
+        private KeywordRepository _keywordRepository;
+
+        [TestInitialize]
+        public void TestInitialize()
         {
-            TestData.Create();
+            _path = $"Keywords-{Guid.NewGuid()}.xml";
+            TestData.Create(_path);
+            _keywordRepository = new KeywordRepository(_path);
         }
 
-        [Test]
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            if (File.Exists(_path))
+                File.Delete(_path);
+        }
+
+        [TestMethod]
         public void CanUpdateCategory()
         {
+            // arrange
             const string newCategoryId = "TestCategory";
-            var oldCategories = KeywordRepository.GetCategories();
+            var oldCategories = _keywordRepository.GetCategories();
             oldCategories.Should().NotContain(c => c.CategoryId == newCategoryId);
             var oldCategoryId = oldCategories.First().CategoryId;
             oldCategoryId.Should().NotBe(newCategoryId);
-            KeywordRepository.UpdateCategory(oldCategoryId, newCategoryId);
-            var newCategories = KeywordRepository.GetCategories();
+
+            // act
+            _keywordRepository.UpdateCategory(oldCategoryId, newCategoryId);
+
+            // assert
+            var newCategories = _keywordRepository.GetCategories();
             newCategories.Should().NotContain(c => c.CategoryId == oldCategoryId);
             newCategories.Count(c => c.CategoryId == newCategoryId).Should().Be(1);
         }
 
-        [Test]
+        [TestMethod]
         public void ExceptionThrownWhenCategoryDoesntExist()
         {
+            // arrange
             const string oldCategoryId = "Foo";
             const string newCategoryId = "Bar";
-            KeywordRepository.GetCategories().Count(c => c.CategoryId == oldCategoryId).Should().Be(0);
-            Assert.That(() => KeywordRepository.UpdateCategory(oldCategoryId, newCategoryId), Throws.TypeOf<ArgumentException>());
+            _keywordRepository.GetCategories().Count(c => c.CategoryId == oldCategoryId).Should().Be(0);
+            
+            // act/assert
+            Assert.ThrowsException<ArgumentException>(() => _keywordRepository.UpdateCategory(oldCategoryId, newCategoryId));
         }
 
-        [Test]
+        [TestMethod]
         public void CanUpdateKeyword()
         {
+            // arrange
             const string newKeywordId = "TestKeyword";
-            var category = KeywordRepository.GetCategories().First();
+            var category = _keywordRepository.GetCategories().First();
             var categoryId = category.CategoryId;
             var oldKeywordId = category.Keywords.First().KeywordId;
             category.Keywords.Count(k => k.KeywordId == oldKeywordId).Should().Be(1);
             category.Keywords.Should().NotContain(c => c.KeywordId == newKeywordId);
             oldKeywordId.Should().NotBe(newKeywordId);
-            KeywordRepository.UpdateKeyword(categoryId, oldKeywordId, newKeywordId);
-            var newCategories = KeywordRepository.GetCategories();
+
+            // act
+            _keywordRepository.UpdateKeyword(categoryId, oldKeywordId, newKeywordId);
+
+            // assert
+            var newCategories = _keywordRepository.GetCategories();
             newCategories.Single(c => c.CategoryId == categoryId)
                 .Keywords.Count(k => k.KeywordId == newKeywordId)
                 .Should().Be(1);
@@ -58,14 +84,17 @@ namespace KeyworderLibTest
                 .NotContain(k => k.KeywordId == oldKeywordId);
         }
 
-        [Test]
+        [TestMethod]
         public void ExceptionThrownWhenKeywordDoesntExist()
         {
+            // arrange
             const string oldKeywordId = "Foo";
             const string newKeywordId = "Bar";
-            var cateogry = KeywordRepository.GetCategories().First();
+            var cateogry = _keywordRepository.GetCategories().First();
             cateogry.Keywords.Count(k => k.KeywordId == oldKeywordId).Should().Be(0);
-            Assert.That(() => KeywordRepository.UpdateKeyword(cateogry.CategoryId, oldKeywordId, newKeywordId), Throws.TypeOf<ArgumentException>());
+
+            // act/assert
+            Assert.ThrowsException<ArgumentException>(() => _keywordRepository.UpdateKeyword(cateogry.CategoryId, oldKeywordId, newKeywordId));
         }
     }
 }

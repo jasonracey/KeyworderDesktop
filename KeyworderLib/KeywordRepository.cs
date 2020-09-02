@@ -5,11 +5,19 @@ using System.Xml.Linq;
 
 namespace KeyworderLib
 {
-    public static class KeywordRepository
+    public class KeywordRepository
     {
-        private const string Path = @"Keywords.xml";
+        private readonly string _path;
 
-        public static void CreateKeyword(string categoryId, string keywordId)
+        public KeywordRepository(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentNullException(nameof(path));
+
+            _path = path;
+        }
+
+        public void CreateKeyword(string categoryId, string keywordId)
         {
             if (string.IsNullOrWhiteSpace(categoryId))
             {
@@ -19,33 +27,33 @@ namespace KeyworderLib
             {
                 throw new ArgumentException("keywordId is required", nameof(keywordId));
             }
-            var document = XDocument.Load(Path);
+            var document = XDocument.Load(_path);
             var category = document.Descendants("Category")
                 .Single(d => d.Attribute("CategoryId").Value == categoryId);
             if (category.Descendants("Keyword")
                 .Count(d => d.Attribute("KeywordId").Value == keywordId) == 0)
             {
                 category.Add(new XElement("Keyword", new XAttribute("KeywordId", keywordId)));
-                document.Save(Path);
+                document.Save(_path);
             }
         }
 
-        public static void CreateCategory(string categoryId)
+        public void CreateCategory(string categoryId)
         {
             if (string.IsNullOrWhiteSpace(categoryId))
             {
                 throw new ArgumentException("categoryId is required", nameof(categoryId));
             }
-            var document = XDocument.Load(Path);
+            var document = XDocument.Load(_path);
             if (document.Descendants("Category")
                 .Count(d => d.Attribute("CategoryId").Value == categoryId) == 0)
             {
                 document.Root?.Add(new XElement("Category", new XAttribute("CategoryId", categoryId)));
-                document.Save(Path);
+                document.Save(_path);
             }
         }
 
-        public static void DeleteKeyword(string categoryId, string keywordId)
+        public void DeleteKeyword(string categoryId, string keywordId)
         {
             if (string.IsNullOrWhiteSpace(categoryId))
             {
@@ -55,7 +63,7 @@ namespace KeyworderLib
             {
                 throw new ArgumentException("keywordId is required", nameof(keywordId));
             }
-            var document = XDocument.Load(Path);
+            var document = XDocument.Load(_path);
             if (document.Descendants("Category")
                     .Single(d => d.Attribute("CategoryId").Value == categoryId)
                     .Descendants("Keyword")
@@ -66,31 +74,31 @@ namespace KeyworderLib
                     .Descendants("Keyword")
                     .Single(d => d.Attribute("KeywordId").Value == keywordId)
                     .Remove();
-                document.Save(Path);
+                document.Save(_path);
             }
         }
 
-        public static void DeleteCategory(string categoryId)
+        public void DeleteCategory(string categoryId)
         {
             if (string.IsNullOrWhiteSpace(categoryId))
             {
                 throw new ArgumentException("categoryId is required", nameof(categoryId));
             }
-            var document = XDocument.Load(Path);
+            var document = XDocument.Load(_path);
             if (document.Descendants("Category")
                 .Count(d => d.Attribute("CategoryId").Value == categoryId) > 0)
             {
                 document.Descendants("Category")
                     .Single(d => d.Attribute("CategoryId").Value == categoryId)
                     .Remove();
-                document.Save(Path);
+                document.Save(_path);
             }
         }
 
-        public static SortedSet<Category> GetCategories()
+        public SortedSet<Category> GetCategories()
         {
             var categories = new SortedSet<Category>(new CategoryComparer());
-            foreach (var categoryNode in XDocument.Load(Path).Descendants("Category"))
+            foreach (var categoryNode in XDocument.Load(_path).Descendants("Category"))
             {
                 var categoryId = categoryNode.Attribute("CategoryId").Value;
                 var category = new Category(categoryId);
@@ -104,7 +112,7 @@ namespace KeyworderLib
             return categories;
         }
 
-        public static void UpdateKeyword(string categoryId, string oldKeywordId, string newKeywordId)
+        public void UpdateKeyword(string categoryId, string oldKeywordId, string newKeywordId)
         {
             if (string.IsNullOrWhiteSpace(categoryId))
             {
@@ -118,7 +126,7 @@ namespace KeyworderLib
             {
                 throw new ArgumentException("newKeywordId is required", nameof(newKeywordId));
             }
-            var document = XDocument.Load(Path);
+            var document = XDocument.Load(_path);
             var keyword = document.Descendants("Category")
                 .Single(d => d.Attribute("CategoryId").Value == categoryId)
                 .Descendants("Keyword")
@@ -128,10 +136,10 @@ namespace KeyworderLib
                 throw new ArgumentException("keyword not found", oldKeywordId);
             }
             keyword.SetAttributeValue("KeywordId", newKeywordId);
-            document.Save(Path);
+            document.Save(_path);
         }
 
-        public static void UpdateCategory(string oldCategoryId, string newCategoryId)
+        public void UpdateCategory(string oldCategoryId, string newCategoryId)
         {
             if (string.IsNullOrWhiteSpace(oldCategoryId))
             {
@@ -141,7 +149,7 @@ namespace KeyworderLib
             {
                 throw new ArgumentException("newCategoryId is required", nameof(newCategoryId));
             }
-            var document = XDocument.Load(Path);
+            var document = XDocument.Load(_path);
             var category = document.Descendants("Category")
                 .SingleOrDefault(d => d.Attribute("CategoryId")
                 .Value == oldCategoryId);
@@ -150,7 +158,7 @@ namespace KeyworderLib
                 throw new ArgumentException("category not found", oldCategoryId);
             }
             category.SetAttributeValue("CategoryId", newCategoryId);
-            document.Save(Path);
+            document.Save(_path);
         }
     }
 }

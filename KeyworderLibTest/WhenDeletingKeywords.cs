@@ -1,56 +1,90 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using FluentAssertions;
 using KeyworderLib;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KeyworderLibTest
 {
-    [TestFixture]
+    [TestClass]
     public class WhenDeletingKeywords
     {
-        [SetUp]
-        public void SetUp()
+        private string _path;
+        private KeywordRepository _keywordRepository;
+
+        [TestInitialize]
+        public void TestInitialize()
         {
-            TestData.Create();
+            _path = $"Keywords-{Guid.NewGuid()}.xml";
+            TestData.Create(_path);
+            _keywordRepository = new KeywordRepository(_path);
         }
 
-        [Test]
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            if (File.Exists(_path))
+                File.Delete(_path);
+        }
+
+        [TestMethod]
         public void CanDeleteExistingCategory()
         {
-            var testCategoryId = KeywordRepository.GetCategories().First().CategoryId;
-            KeywordRepository.DeleteCategory(testCategoryId);
-            KeywordRepository.GetCategories().Should()
+            // arrange
+            var testCategoryId = _keywordRepository.GetCategories().First().CategoryId;
+
+            // act
+            _keywordRepository.DeleteCategory(testCategoryId);
+
+            // assert
+            _keywordRepository.GetCategories().Should()
                 .NotContain(c => c.CategoryId == testCategoryId);
         }
         
-        [Test]
+        [TestMethod]
         public void NoErrorWhenCategoryDoesntExist()
         {
+            // arrange
             const string testCategoryId = "Foo";
-            KeywordRepository.DeleteCategory(testCategoryId);
-            KeywordRepository.GetCategories().Should()
+
+            // act
+            _keywordRepository.DeleteCategory(testCategoryId);
+
+            // assert
+            _keywordRepository.GetCategories().Should()
                 .NotContain(c => c.CategoryId == testCategoryId);
         }
 
-        [Test]
+        [TestMethod]
         public void CanDeleteExistingKeyword()
         {
-            var testCategory = KeywordRepository.GetCategories().First();
+            //arrange
+            var testCategory = _keywordRepository.GetCategories().First();
             var testCategoryId = testCategory.CategoryId;
             var testKeywordId = testCategory.Keywords.First().KeywordId;
-            KeywordRepository.DeleteKeyword(testCategoryId, testKeywordId);
-            KeywordRepository.GetCategories().Single(c => c.CategoryId == testCategoryId)
+
+            // act
+            _keywordRepository.DeleteKeyword(testCategoryId, testKeywordId);
+
+            // assert
+            _keywordRepository.GetCategories().Single(c => c.CategoryId == testCategoryId)
                 .Keywords.Should().NotContain(k => k.KeywordId == testKeywordId);
         }
 
-        [Test]
+        [TestMethod]
         public void NoErrorWhenKeywordDoesntExist()
         {
-            var testCategory = KeywordRepository.GetCategories().First();
+            //arrange
+            var testCategory = _keywordRepository.GetCategories().First();
             var testCategoryId = testCategory.CategoryId;
             const string testKeywordId = "Foo";
-            KeywordRepository.DeleteKeyword(testCategoryId, testKeywordId);
-            KeywordRepository.GetCategories().Single(c => c.CategoryId == testCategoryId)
+
+            // act
+            _keywordRepository.DeleteKeyword(testCategoryId, testKeywordId);
+
+            // assert
+            _keywordRepository.GetCategories().Single(c => c.CategoryId == testCategoryId)
                 .Keywords.Should().NotContain(k => k.KeywordId == testKeywordId);
         }
     }

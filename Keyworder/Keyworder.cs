@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using KeyworderLib;
@@ -11,6 +10,8 @@ namespace Keyworder
 {
     public partial class Keyworder : Form
     {
+        private readonly KeywordRepository _keywordRepository = new KeywordRepository(@"Keywords.xml");
+
         public Keyworder()
         {
             InitializeComponent();
@@ -18,14 +19,14 @@ namespace Keyworder
 
         private void Keyworder_Load(object sender, EventArgs e)
         {
-            var categories = KeywordRepository.GetCategories();
+            var categories = _keywordRepository.GetCategories();
             InitCreateTab(categories);
             InitSelectTab(categories);
         }
 
         private void buttonClearSelections_Click(object sender, EventArgs e)
         {
-            InitSelectTab(KeywordRepository.GetCategories());
+            InitSelectTab(_keywordRepository.GetCategories());
         }
 
         private void buttonCopyToClipboard_Click(object sender, EventArgs e)
@@ -58,7 +59,7 @@ namespace Keyworder
             var textInfo = new CultureInfo("en-US", false).TextInfo;
             category = textInfo.ToTitleCase(category);
 
-            KeywordRepository.CreateCategory(category);
+            _keywordRepository.CreateCategory(category);
 
             ReloadForm();
 
@@ -88,7 +89,7 @@ namespace Keyworder
             var textInfo = new CultureInfo("en-US", false).TextInfo;
             keyword = textInfo.ToTitleCase(keyword);
 
-            KeywordRepository.CreateKeyword(category, keyword);
+            _keywordRepository.CreateKeyword(category, keyword);
 
             // retain selected category and keep focus here
             var selectedIndex = comboBoxCategoryOfKeywordToCreate.SelectedIndex;
@@ -123,11 +124,11 @@ namespace Keyworder
             {
                 if (node.Parent == null)
                 {
-                    KeywordRepository.DeleteCategory(node.Text);
+                    _keywordRepository.DeleteCategory(node.Text);
                 }
                 else
                 {
-                    KeywordRepository.DeleteKeyword(node.Parent.Text, node.Text);
+                    _keywordRepository.DeleteKeyword(node.Parent.Text, node.Text);
                 }
             }
             ReloadForm();
@@ -182,13 +183,13 @@ namespace Keyworder
 
             if (e.Node.Parent == null)
             {
-                KeywordRepository.UpdateCategory(oldText, newText);
-                var categories = KeywordRepository.GetCategories();
+                _keywordRepository.UpdateCategory(oldText, newText);
+                var categories = _keywordRepository.GetCategories();
                 InitCreateTab(categories);
             }
             else
             {
-                KeywordRepository.UpdateKeyword(e.Node.Parent.Text, oldText, newText);
+                _keywordRepository.UpdateKeyword(e.Node.Parent.Text, oldText, newText);
                 PopulateListBoxSelectedItems(treeViewSelectKeywords.Nodes);
             }
         }
@@ -265,7 +266,7 @@ namespace Keyworder
 
         private void ReloadForm()
         {
-            var categories = KeywordRepository.GetCategories();
+            var categories = _keywordRepository.GetCategories();
             InitCreateTab(categories);
             RefreshSelectTab(categories);
         }

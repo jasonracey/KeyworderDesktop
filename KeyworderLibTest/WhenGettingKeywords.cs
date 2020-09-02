@@ -1,22 +1,39 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.IO;
+using FluentAssertions;
 using KeyworderLib;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KeyworderLibTest
 {
-    [TestFixture]
+    [TestClass]
     public class WhenGettingKeywords
     {
-        [SetUp]
-        public void SetUp()
+        private string _path;
+        private KeywordRepository _keywordRepository;
+
+        [TestInitialize]
+        public void TestInitialize()
         {
-            TestData.Create();
+            _path = $"Keywords-{Guid.NewGuid()}.xml";
+            TestData.Create(_path);
+            _keywordRepository = new KeywordRepository(_path);
         }
 
-        [Test]
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            if (File.Exists(_path))
+                File.Delete(_path);
+        }
+
+        [TestMethod]
         public void CanGetCategories()
         {
-            var categories = KeywordRepository.GetCategories();
+            // act
+            var categories = _keywordRepository.GetCategories();
+
+            // assert
             categories.Count.Should().BeGreaterThan(0);
             foreach (var category in categories)
             {

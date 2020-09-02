@@ -4,10 +4,8 @@ namespace KeyworderLibTest
 {
     public static class TestData
     {
-        public static void Create()
+        public static void Create(string path)
         {
-            const string path = @"Keywords.xml";
-
             if (File.Exists(path))
             {
                 File.Delete(path);
