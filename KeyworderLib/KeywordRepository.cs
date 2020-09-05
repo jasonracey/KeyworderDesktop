@@ -8,6 +8,8 @@ namespace KeyworderLib
 {
     public class KeywordRepository
     {
+        private static readonly CategoryComparer _categoryComparer = new CategoryComparer();
+
         private readonly string _keywordsXmlPath;
 
         public KeywordRepository(string keywordsXmlPath)
@@ -105,7 +107,7 @@ namespace KeyworderLib
 
         public IEnumerable<Category> GetCategories()
         {
-            var categories = new SortedSet<Category>(new CategoryComparer());
+            var categories = new SortedSet<Category>(_categoryComparer);
             foreach (var categoryNode in XDocument.Load(_keywordsXmlPath).Descendants("Category"))
             {
                 var categoryId = categoryNode.Attribute("CategoryId").Value;

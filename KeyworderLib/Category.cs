@@ -5,6 +5,8 @@ namespace KeyworderLib
 {
     public class Category
     {
+        private static readonly KeywordComparer _keywordComparer = new KeywordComparer();
+
         public string CategoryId { get; private set; }
 
         public ICollection<Keyword> Keywords { get; private set; }
@@ -16,7 +18,7 @@ namespace KeyworderLib
                 throw new ArgumentException("CategoryId is required", nameof(categoryId));
             }
             CategoryId = categoryId;
-            Keywords = new SortedSet<Keyword>(new KeywordComparer());
+            Keywords = new SortedSet<Keyword>(_keywordComparer);
         }
     }
 }
