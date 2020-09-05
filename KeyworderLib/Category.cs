@@ -7,7 +7,7 @@ namespace KeyworderLib
     {
         public string CategoryId { get; private set; }
 
-        public SortedSet<Keyword> Keywords { get; private set; }
+        public ICollection<Keyword> Keywords { get; private set; }
 
         public Category(string categoryId)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using FluentAssertions;
 using KeyworderLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -34,7 +35,7 @@ namespace KeyworderLibTest
             var categories = _keywordRepository.GetCategories();
 
             // assert
-            categories.Count.Should().BeGreaterThan(0);
+            categories.Count().Should().BeGreaterThan(0);
             foreach (var category in categories)
             {
                 category.Should().NotBeNull();

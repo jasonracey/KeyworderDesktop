@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -35,29 +36,28 @@ namespace Keyworder
                 {
                     checkedNodes.Add(node);
                 }
-
                 checkedNodes.AddRange(GetCheckedNodes(node.Nodes));
             }
             return checkedNodes;
         }
 
-        public static Dictionary<string, Tuple<bool, bool>> GetState(IEnumerable nodes)
+        public static IDictionary<string, (bool IsChecked, bool IsExpanded)> GetState(IEnumerable nodes)
         {
             // dictionary doesn't have an AddRange so use list in recursive function and then map
-            return BuildStateList(nodes).ToDictionary(
-                tuple => $"{tuple.Item1},{tuple.Item2}",
-                tuple => new Tuple<bool, bool>(tuple.Item3, tuple.Item4));
+            return BuildStateCollection(nodes).ToImmutableDictionary(
+                item => BuildKey(item.Category, item.Keyword),
+                item => (item.IsChecked, item.IsExpanded));
         }
 
-        public static void SetState(IEnumerable nodes, Dictionary<string, Tuple<bool, bool>> state)
+        public static void SetState(IEnumerable nodes, IDictionary<string, (bool IsChecked, bool IsExpanded)> state)
         {
             foreach (TreeNode node in nodes)
             {
-                var key = $"{GetCategoryText(node)},{GetKeywordText(node)}";
+                var key = BuildKey(GetCategoryText(node), GetKeywordText(node));
                 if (state.ContainsKey(key))
                 {
-                    node.Checked = state[key].Item1;
-                    if (state[key].Item2)
+                    node.Checked = state[key].IsChecked;
+                    if (state[key].IsExpanded)
                     {
                         node.Expand();
                     }
@@ -74,6 +74,8 @@ namespace Keyworder
                 UpdateChildNodes(node, nodeChecked);
             }
         }
+        
+        private static string BuildKey(string category, string keyword) => $"{category},{keyword}";
 
         private static string GetCategoryText(TreeNode node)
         {
@@ -90,21 +92,21 @@ namespace Keyworder
             return node.Checked || node.Nodes.Cast<TreeNode>().Any(AnyNodeIsChecked);
         }
 
-        private static IEnumerable<Tuple<string, string, bool, bool>> BuildStateList(IEnumerable nodes)
+        private static IEnumerable<(string Category, string Keyword, bool IsChecked, bool IsExpanded)> BuildStateCollection(IEnumerable nodes)
         {
-            var state = new List<Tuple<string, string, bool, bool>>();
+            var state = new List<(string, string, bool, bool)>();
             foreach (TreeNode node in nodes)
             {
                 // only need to store state that is not default
                 if (node.Checked || node.IsExpanded)
                 {
-                    state.Add(new Tuple<string, string, bool, bool>(
+                    state.Add((
                         GetCategoryText(node), 
                         GetKeywordText(node), 
                         node.Checked, 
                         node.IsExpanded));
                 }
-                state.AddRange(BuildStateList(node.Nodes));
+                state.AddRange(BuildStateCollection(node.Nodes));
             }
             return state;
         }
