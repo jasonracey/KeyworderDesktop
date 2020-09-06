@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace KeyworderLib
 {
-    public class KeywordRepository : IKeywordRepository
+    public class KeywordRepository
     {
         private static readonly CategoryComparer _categoryComparer = new CategoryComparer();
 
@@ -21,7 +21,7 @@ namespace KeyworderLib
 
             if (!File.Exists(keywordsXmlPath))
             {
-                throw new ArgumentException("file not found", nameof(keywordsXmlPath));
+                File.Create(keywordsXmlPath);
             }
 
             _keywordsXmlPath = keywordsXmlPath;

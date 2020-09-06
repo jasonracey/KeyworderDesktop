@@ -1,34 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Xml.Linq;
 using FluentAssertions;
-using KeyworderLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KeyworderLibTest
 {
     [TestClass]
-    public class WhenCreatingKeywords
+    public class WhenCreatingKeywords : TestBase
     {
-        private string _path = string.Empty;
-        private IKeywordRepository _keywordRepository = new NoOpKeywordRepository();
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            _path = $"Keywords-{Guid.NewGuid()}.xml";
-            TestData.Create(_path);
-            _keywordRepository = new KeywordRepository(_path);
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            if (File.Exists(_path))
-                File.Delete(_path);
-        }
-
         [TestMethod]
         public void CanCreateNewCategory()
         {
