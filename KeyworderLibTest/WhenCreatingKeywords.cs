@@ -11,8 +11,8 @@ namespace KeyworderLibTest
     [TestClass]
     public class WhenCreatingKeywords
     {
-        private string _path;
-        private KeywordRepository _keywordRepository;
+        private string _path = string.Empty;
+        private IKeywordRepository _keywordRepository = new NoOpKeywordRepository();
 
         [TestInitialize]
         public void TestInitialize()

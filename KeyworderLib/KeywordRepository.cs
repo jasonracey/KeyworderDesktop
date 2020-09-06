@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace KeyworderLib
 {
-    public class KeywordRepository
+    public class KeywordRepository : IKeywordRepository
     {
         private static readonly CategoryComparer _categoryComparer = new CategoryComparer();
 
