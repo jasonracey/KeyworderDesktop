@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using KeyworderLib;
@@ -83,7 +84,7 @@ namespace Keyworder
                 return;
             }
 
-            var category = comboBoxCategoryOfKeywordToCreate.SelectedItem.ToString();
+            var category = comboBoxCategoryOfKeywordToCreate.SelectedItem.ToString() ?? throw new KeyworderException("Category is null");
             var keyword = textBoxCreateKeyword.CleanText();
 
             var textInfo = new CultureInfo("en-US", false).TextInfo;
@@ -221,9 +222,9 @@ namespace Keyworder
         {
             listBoxSelectedKeywords.BeginUpdate();
             listBoxSelectedKeywords.Items.Clear();
-            foreach (TreeNode categoryNode in treeNodes)
+            foreach (var categoryNode in treeNodes.Cast<TreeNode>())
             {
-                foreach (TreeNode keywordNode in categoryNode.Nodes)
+                foreach (var keywordNode in categoryNode.Nodes.Cast<TreeNode>())
                 {
                     if (keywordNode.Checked)
                     {

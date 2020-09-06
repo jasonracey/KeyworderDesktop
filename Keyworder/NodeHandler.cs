@@ -17,7 +17,7 @@ namespace Keyworder
         public static TreeNode GetCategoryNode(IEnumerable nodes, string category)
         {
             // don't need to recurse because category nodes are all root depth
-            foreach (TreeNode node in nodes)
+            foreach (var node in nodes.Cast<TreeNode>())
             {
                 if (node.Text == category)
                 {
@@ -30,7 +30,7 @@ namespace Keyworder
         public static IEnumerable<TreeNode> GetCheckedNodes(IEnumerable nodes)
         {
             var checkedNodes = new List<TreeNode>();
-            foreach (TreeNode node in nodes)
+            foreach (var node in nodes.Cast<TreeNode>())
             {
                 if (node.Checked)
                 {
@@ -51,7 +51,7 @@ namespace Keyworder
 
         public static void SetState(IEnumerable nodes, IDictionary<string, (bool IsChecked, bool IsExpanded)> state)
         {
-            foreach (TreeNode node in nodes)
+            foreach (var node in nodes.Cast<TreeNode>())
             {
                 var key = BuildKey(GetCategoryText(node), GetKeywordText(node));
                 if (state.ContainsKey(key))
@@ -68,7 +68,7 @@ namespace Keyworder
 
         public static void UpdateChildNodes(TreeNode treeNode, bool nodeChecked)
         {
-            foreach (TreeNode node in treeNode.Nodes)
+            foreach (var node in treeNode.Nodes.Cast<TreeNode>())
             {
                 node.Checked = nodeChecked;
                 UpdateChildNodes(node, nodeChecked);
@@ -95,7 +95,7 @@ namespace Keyworder
         private static IEnumerable<(string Category, string Keyword, bool IsChecked, bool IsExpanded)> BuildStateCollection(IEnumerable nodes)
         {
             var state = new List<(string, string, bool, bool)>();
-            foreach (TreeNode node in nodes)
+            foreach (var node in nodes.Cast<TreeNode>())
             {
                 // only need to store state that is not default
                 if (node.Checked || node.IsExpanded)
