@@ -79,7 +79,9 @@ namespace Keyworder
 
         private static string GetCategoryText(TreeNode node)
         {
-            return node.Nodes.Count > 0 ? node.Text : node.Parent.Text;
+            return node?.Parent == null
+                ? node?.Text ?? string.Empty 
+                : node?.Parent?.Text ?? string.Empty;
         }
 
         private static string GetKeywordText(TreeNode node)

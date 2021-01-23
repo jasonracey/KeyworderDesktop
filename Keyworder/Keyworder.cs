@@ -120,18 +120,20 @@ namespace Keyworder
                 return;
             }
 
-            var checkedNodes = NodeHandler.GetCheckedNodes(treeViewSelectKeywords.Nodes);
-            foreach (var node in checkedNodes)
+            var checkedKeywordNodes = NodeHandler.GetCheckedNodes(treeViewSelectKeywords.Nodes)
+                .Where(node => node.Parent != null);
+            foreach (var node in checkedKeywordNodes)
             {
-                if (node.Parent == null)
-                {
-                    _keywordRepository.DeleteCategory(node.Text);
-                }
-                else
-                {
-                    _keywordRepository.DeleteKeyword(node.Parent.Text, node.Text);
-                }
+                _keywordRepository.DeleteKeyword(node.Parent.Text, node.Text);
             }
+
+            var checkedCategoryNodes = NodeHandler.GetCheckedNodes(treeViewSelectKeywords.Nodes)
+                .Where(node => node.Parent == null);
+            foreach (var node in checkedCategoryNodes)
+            {
+                _keywordRepository.DeleteCategory(node.Text);
+            }
+
             ReloadForm();
             labelSelectKeywordsMessage.Text = @"items deleted";
             labelSelectKeywordsMessage.Visible = true;
